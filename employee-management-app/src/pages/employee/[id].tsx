@@ -1,0 +1,40 @@
+import { Grid, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import React, { useMemo } from 'react';
+import { getUser } from '../../../lib/helper';
+import EmployeeForm from '../../app/features/employee/EmployeeForm';
+
+const EmployeeDetailPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  const { data, isLoading, isError, error } = useQuery(['user', id], () =>
+    getUser(id as string),
+  );
+
+  const renderEmployeeForm = useMemo(() => {
+    return <EmployeeForm employee={data} />;
+  }, [data]);
+
+  if (isLoading) {
+    return <Typography>Employee is Loading...</Typography>;
+  }
+
+  return (
+    <Grid
+      container
+      p={8}
+      justifyContent="center"
+      alignItems="center"
+      spacing={8}>
+      <Grid item>
+        <Typography variant="h4">Employee Detail</Typography>
+      </Grid>
+      <Grid item container>
+        {renderEmployeeForm}
+      </Grid>
+    </Grid>
+  );
+};
+
+export default EmployeeDetailPage;
