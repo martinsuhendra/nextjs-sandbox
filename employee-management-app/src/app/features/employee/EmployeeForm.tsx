@@ -30,6 +30,7 @@ import { toggleChangeAction } from '../../redux/rootReducer';
 import dayjs from 'dayjs';
 import { LoadingButton } from '@mui/lab';
 import { Employee } from './EmployeeList';
+import { faker } from '@faker-js/faker';
 
 export enum Statuses {
   ACTIVE = 'active',
@@ -42,7 +43,7 @@ export type EmployeeInput = {
   lastName: string;
   email: string;
   salary: number;
-  birthday: string;
+  birthday: Date;
   status: Statuses;
   avatar?: string;
 };
@@ -60,6 +61,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
     handleSubmit,
     setError,
     setValue,
+    reset,
     formState: { isSubmitted, isValid },
   } = useForm<EmployeeInput>({
     defaultValues: {
@@ -67,13 +69,24 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
       lastName: employee?.lastName || '',
       email: employee?.email || '',
       salary: employee?.salary || 0,
-      birthday: employee?.birthday
-        ? dayjs(employee?.birthday).format()
-        : dayjs().format(),
+      birthday: employee?.birthday || new Date(),
       status: employee?.status || Statuses.ACTIVE,
       avatar: employee?.avatar || '',
     },
   });
+
+  const generatePeople = () => {
+    const randomEmployee = {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      salary: faker.datatype.number({ min: 1000, max: 10000 }),
+      birthday: faker.date.birthdate(),
+      avatar: faker.image.avatar(),
+    };
+
+    reset(randomEmployee);
+  };
 
   //REACT QUERY
   // const queryClient = useQueryClient();
@@ -103,11 +116,6 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
   );
 
   const onSubmit = async (data: EmployeeInput) => {
-    const payload = {
-      ...data,
-      birthday: dayjs(data.birthday).format('DD/MM/YYYY'),
-    };
-
     //React Query
     // employee
     //   ? updateMutation({ _id: employee._id as string, payload })
@@ -115,12 +123,12 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
 
     //RTK Query
     if (employee) {
-      await editEmployee({ _id: employee._id as string, payload });
+      await editEmployee({ _id: employee._id as string, payload: data });
     } else {
-      await createEmployee(payload);
+      await createEmployee(data);
       dispatch(toggleChangeAction());
     }
-    result.refetch();
+    // result.refetch();
   };
 
   if (isError) {
@@ -216,13 +224,25 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
           spacing={3}
           justifyContent="flex-end"
           alignItems="center">
+          {!employee && (
+            <Grid item>
+              <Button
+                onClick={generatePeople}
+                type="button"
+                variant="outlined"
+                disableElevation
+                color="primary">
+                Generate
+              </Button>
+            </Grid>
+          )}
           <Grid item>
             <Button
               onClick={onCancel}
               type="button"
               disableElevation
               color="primary">
-              Cancel
+              {employee ? 'Back' : 'Cancel'}
             </Button>
           </Grid>
           <Grid item>

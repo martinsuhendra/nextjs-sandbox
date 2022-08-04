@@ -18,7 +18,7 @@ const EmployeeDetailPage = () => {
   const { data, isLoading } = useGetUserQuery(id as string);
 
   const renderEmployeeForm = useMemo(() => {
-    return <EmployeeForm employee={data} />;
+    return <EmployeeForm employee={data} onCancel={() => router.back()} />;
   }, [data]);
 
   if (isLoading) {
@@ -33,7 +33,9 @@ const EmployeeDetailPage = () => {
       alignItems="center"
       spacing={8}>
       <Grid item>
-        <Typography variant="h4">Employee Detail</Typography>
+        <Typography variant="h4" sx={{ fontWeight: 500, letterSpacing: -1 }}>
+          Employee Detail
+        </Typography>
       </Grid>
       <Grid item container>
         {renderEmployeeForm}

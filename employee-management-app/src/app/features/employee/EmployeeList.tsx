@@ -9,10 +9,19 @@ import {
 } from '../../../../lib/helper';
 import { Statuses } from './EmployeeForm';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Typography, Grid, IconButton } from '@mui/material';
+import {
+  Button,
+  Typography,
+  Grid,
+  IconButton,
+  Avatar,
+  Chip,
+} from '@mui/material';
 import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import Link from 'next/link';
+import dayjs from 'dayjs';
+import { fCurrency } from '../../../common/utils/formatNumber';
 
 export type Employee = {
   _id: string;
@@ -49,7 +58,18 @@ const EmployeeList = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    {
+      field: 'avatar',
+      headerName: 'Avatar',
+      width: 90,
+      sortable: false,
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <Grid container justifyContent="center">
+          <Avatar alt={params.row.firstName} src={params.row.avatar} />
+        </Grid>
+      ),
+    },
     {
       field: 'name',
       headerName: 'Name',
@@ -62,27 +82,41 @@ const EmployeeList = () => {
       headerName: 'Birthday',
       type: 'date',
       width: 160,
-    },
-    {
-      field: 'email',
-      headerName: 'Email',
-      width: 200,
+      valueGetter: (params: GridValueGetterParams) =>
+        dayjs(params.row.birthday).format('DD-MM-YYYY'),
     },
     {
       field: 'salary',
       headerName: 'Salary',
       type: 'number',
       width: 160,
+      valueGetter: (params: GridValueGetterParams) =>
+        fCurrency(params.row.salary),
     },
     {
       field: 'status',
       headerName: 'Status',
-      width: 160,
+      minWidth: 160,
+      renderCell: (params) => (
+        <Chip
+          variant="outlined"
+          label={params.row.status}
+          color={params.row.status === 'active' ? 'success' : 'error'}
+        />
+      ),
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      minWidth: 200,
+      sortable: false,
+      flex: 1,
     },
     {
       field: '',
       headerName: 'Action',
-      flex: 1,
+      headerAlign: 'center',
+      minWidth: 100,
       renderCell: (params) => (
         <Grid container alignItems="center" spacing={2}>
           <Grid item>
@@ -138,8 +172,15 @@ const EmployeeList = () => {
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
-        checkboxSelection
         disableSelectionOnClick
+        sx={{
+          boxShadow: 1,
+          border: 0.5,
+          borderColor: 'primary.light',
+          '& .MuiDataGrid-cell:hover': {
+            color: 'primary.main',
+          },
+        }}
       />
     </Box>
   );

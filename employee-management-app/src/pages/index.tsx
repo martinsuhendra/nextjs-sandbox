@@ -1,16 +1,5 @@
 import { Add as AddIcon } from '@mui/icons-material';
-import {
-  Typography,
-  Grid,
-  Button,
-  Divider,
-  useTheme,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-} from '@mui/material';
+import { Typography, Grid, Button, useTheme } from '@mui/material';
 import Head from 'next/head';
 import { useDispatch } from 'react-redux';
 import EmployeeForm from '../app/features/employee/EmployeeForm';
@@ -44,7 +33,11 @@ export default function Home() {
           spacing={4}
           p={theme.spacing(8)}>
           <Grid item>
-            <Typography variant="h4">Employee Management</Typography>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: 500, letterSpacing: -1 }}>
+              Employee Management
+            </Typography>
           </Grid>
           <Grid item xs container>
             <Button

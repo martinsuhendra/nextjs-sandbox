@@ -94,7 +94,7 @@ export const employeeApi = createApi({
         method: 'post',
         body: employee,
       }),
-      invalidatesTags: ['Employees'],
+      // invalidatesTags: ['Employees'],
     }),
     editUser: builder.mutation<{}, EmployeeUpdateInput>({
       query: ({ _id, payload }) => ({
