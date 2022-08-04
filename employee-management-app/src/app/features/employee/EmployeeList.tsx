@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { deleteUser, getUsers } from '../../../../lib/helper';
+import {
+  deleteUser,
+  getUsers,
+  useDeleteUserMutation,
+  useGetUsersQuery,
+} from '../../../../lib/helper';
 import { Statuses } from './EmployeeForm';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Typography, Grid, IconButton } from '@mui/material';
@@ -9,7 +14,7 @@ import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import Link from 'next/link';
 
-type Employee = {
+export type Employee = {
   _id: string;
   firstName: string;
   lastName: string;
@@ -17,19 +22,31 @@ type Employee = {
   salary: number;
   birthday: Date;
   status: Statuses;
+  avatar?: string;
 };
 
 const EmployeeList = () => {
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState<Employee[] | []>([]);
 
-  const queryClient = useQueryClient();
+  //REACT-QUERY
+  // const queryClient = useQueryClient();
+  // const { isLoading, is Error, data, error } = useQuery(['users'], getUsers);
 
-  const { isLoading, isError, data, error } = useQuery(['users'], getUsers);
-  const { mutate } = useMutation(deleteUser, {
-    onSuccess: () => {
-      queryClient.prefetchQuery(['users'], getUsers);
-    },
-  });
+  // const { mutate } = useMutation(deleteUser, {
+  //   onSuccess: () => {
+  //     queryClient.prefetchQuery(['users'], getUsers);
+  //   },
+  // });
+
+  //RTK-QUERY
+
+  const { data, isError, isLoading } = useGetUsersQuery();
+
+  const [deleteEmployee] = useDeleteUserMutation();
+
+  const onDelete = async (deleteId: string) => {
+    await deleteEmployee(deleteId);
+  };
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -80,7 +97,7 @@ const EmployeeList = () => {
               color="error"
               size="small"
               aria-label="delete"
-              onClick={() => mutate(params.row._id)}>
+              onClick={() => onDelete(params.row._id)}>
               <DeleteIcon fontSize="small" />
             </IconButton>
           </Grid>

@@ -17,11 +17,19 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Controller, useForm } from 'react-hook-form';
 import FormTextField from '../../../common/components/forms/FormTextField';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addUser, getUsers, updateUser } from '../../../../lib/helper';
+import {
+  addUser,
+  getUsers,
+  updateUser,
+  useAddUserMutation,
+  useEditUserMutation,
+  useGetUsersQuery,
+} from '../../../../lib/helper';
 import { useDispatch } from 'react-redux';
 import { toggleChangeAction } from '../../redux/rootReducer';
 import dayjs from 'dayjs';
 import { LoadingButton } from '@mui/lab';
+import { Employee } from './EmployeeList';
 
 export enum Statuses {
   ACTIVE = 'active',
@@ -36,12 +44,12 @@ export type EmployeeInput = {
   salary: number;
   birthday: string;
   status: Statuses;
-  avatar: string;
+  avatar?: string;
 };
 
 interface EmployeeFormProps {
   onCancel?: () => void;
-  employee?: EmployeeInput;
+  employee?: Employee;
 }
 
 const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
@@ -67,18 +75,25 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
     },
   });
 
-  const queryClient = useQueryClient();
-  const { mutate, isLoading, isError } = useMutation(addUser, {
-    onSuccess: () => {
-      dispatch(toggleChangeAction());
-      queryClient.prefetchQuery(['users'], getUsers);
-    },
-  });
-  const { mutate: updateMutation } = useMutation(updateUser, {
-    onSuccess: () => {
-      queryClient.prefetchQuery(['users'], getUsers);
-    },
-  });
+  //REACT QUERY
+  // const queryClient = useQueryClient();
+  // const { mutate, isLoading, isError } = useMutation(addUser, {
+  //   onSuccess: () => {
+  //     dispatch(toggleChangeAction());
+  //     queryClient.prefetchQuery(['users'], getUsers);
+  //   },
+  // });
+  // const { mutate: updateMutation } = useMutation(updateUser, {
+  //   onSuccess: () => {
+  //     queryClient.prefetchQuery(['users'], getUsers);
+  //   },
+  // });
+
+  //RTK QUERY
+  const result = useGetUsersQuery();
+  const [createEmployee, { isLoading, isError }] = useAddUserMutation();
+  const [editEmployee, { isLoading: updateLoading, isError: updateError }] =
+    useEditUserMutation();
 
   const onChangeStatus = useCallback(
     (value: Statuses) => {
@@ -87,14 +102,25 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
     [setValue],
   );
 
-  const onSubmit = (data: EmployeeInput) => {
+  const onSubmit = async (data: EmployeeInput) => {
     const payload = {
       ...data,
       birthday: dayjs(data.birthday).format('DD/MM/YYYY'),
     };
-    employee
-      ? updateMutation({ _id: employee._id as string, payload })
-      : mutate(payload);
+
+    //React Query
+    // employee
+    //   ? updateMutation({ _id: employee._id as string, payload })
+    //   : mutate(payload);
+
+    //RTK Query
+    if (employee) {
+      await editEmployee({ _id: employee._id as string, payload });
+    } else {
+      await createEmployee(payload);
+      dispatch(toggleChangeAction());
+    }
+    result.refetch();
   };
 
   if (isError) {

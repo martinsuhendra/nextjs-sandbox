@@ -2,15 +2,20 @@ import { Grid, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
-import { getUser } from '../../../lib/helper';
+import { getUser, useGetUserQuery } from '../../../lib/helper';
 import EmployeeForm from '../../app/features/employee/EmployeeForm';
 
 const EmployeeDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data, isLoading, isError, error } = useQuery(['user', id], () =>
-    getUser(id as string),
-  );
+
+  //REACT QUERY
+  // const { data, isLoading, isError, error } = useQuery(['user', id], () =>
+  //   getUser(id as string),
+  // );
+
+  //RTK QUERY
+  const { data, isLoading } = useGetUserQuery(id as string);
 
   const renderEmployeeForm = useMemo(() => {
     return <EmployeeForm employee={data} />;

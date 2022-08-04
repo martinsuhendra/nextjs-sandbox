@@ -7,6 +7,7 @@ type EmployeeUpdateInput = {
   payload: EmployeeInput;
 };
 
+// React Query
 export const getUsers = async () => {
   const response = await fetch(`${BASE_URL}/api/users`);
   const json = response.json();
@@ -69,3 +70,54 @@ export const deleteUser = async (userId: string) => {
     return error;
   }
 };
+
+// RTK Query
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Employee } from '../src/app/features/employee/EmployeeList';
+
+export const employeeApi = createApi({
+  reducerPath: 'employee',
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  tagTypes: ['Employee', 'Employees'],
+  endpoints: (builder) => ({
+    getUsers: builder.query<Employee[], void>({
+      query: () => '/api/users',
+      providesTags: ['Employees'],
+    }),
+    getUser: builder.query<Employee, string>({
+      query: (employeeId) => `/api/users/${employeeId}`,
+      providesTags: ['Employee'],
+    }),
+    addUser: builder.mutation<{}, EmployeeInput>({
+      query: (employee) => ({
+        url: '/api/users',
+        method: 'post',
+        body: employee,
+      }),
+      invalidatesTags: ['Employees'],
+    }),
+    editUser: builder.mutation<{}, EmployeeUpdateInput>({
+      query: ({ _id, payload }) => ({
+        url: `/api/users/${_id}`,
+        method: 'put',
+        body: payload,
+      }),
+      invalidatesTags: ['Employees'],
+    }),
+    deleteUser: builder.mutation<{}, string>({
+      query: (employeeId) => ({
+        url: `/api/users/${employeeId}`,
+        method: 'delete',
+      }),
+      invalidatesTags: ['Employees'],
+    }),
+  }),
+});
+
+export const {
+  useGetUsersQuery,
+  useGetUserQuery,
+  useAddUserMutation,
+  useDeleteUserMutation,
+  useEditUserMutation,
+} = employeeApi;
