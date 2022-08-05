@@ -26,7 +26,11 @@ import {
   useGetUsersQuery,
 } from '../../../../lib/helper';
 import { useDispatch } from 'react-redux';
-import { toggleChangeAction } from '../../redux/rootReducer';
+import {
+  Severity,
+  snackbar,
+  toggleChangeAction,
+} from '../../redux/rootReducer';
 import dayjs from 'dayjs';
 import { LoadingButton } from '@mui/lab';
 import { Employee } from './EmployeeList';
@@ -103,10 +107,11 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
   // });
 
   //RTK QUERY
-  const result = useGetUsersQuery();
-  const [createEmployee, { isLoading, isError }] = useAddUserMutation();
-  const [editEmployee, { isLoading: updateLoading, isError: updateError }] =
-    useEditUserMutation();
+  const [createEmployee, { isLoading, isError, error }] = useAddUserMutation();
+  const [
+    editEmployee,
+    { isLoading: updateLoading, isError: isUpdateError, error: updateError },
+  ] = useEditUserMutation();
 
   const onChangeStatus = useCallback(
     (value: Statuses) => {
@@ -124,18 +129,16 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
     //RTK Query
     if (employee) {
       await editEmployee({ _id: employee._id as string, payload: data });
+      dispatch(snackbar({ message: 'Successfully update data!' }));
     } else {
       await createEmployee(data);
       dispatch(toggleChangeAction());
     }
-    // result.refetch();
   };
 
-  if (isError) {
-    return (
-      <Box>
-        <Typography>Got Error...</Typography>
-      </Box>
+  if (isError || isUpdateError) {
+    dispatch(
+      snackbar({ message: error || updateError, severity: Severity.ERROR }),
     );
   }
 

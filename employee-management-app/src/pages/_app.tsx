@@ -12,6 +12,8 @@ import ToastProvider from '../common/components/ToastProvider';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { store } from '../app/redux/store';
 import { Provider as RTKProvider } from 'react-redux';
+import useAppSelector from '../common/hooks/useAppSelector';
+import Snackbar from '../common/components/Snackbar';
 
 // Client-side cache shared for the whole session
 // of the user in the browser.
@@ -48,6 +50,7 @@ export default function MyApp(props: ExtendedAppProps) {
             <CssBaseline />
             <ToastProvider />
             <Component {...pageProps} />
+            <Snackbar />
           </ThemeProvider>
         </CacheProvider>
       </RTKProvider>
