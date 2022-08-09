@@ -1,8 +1,10 @@
-import { Connection, Mongoose } from 'mongoose';
+/* eslint-disable no-var */
+import { Mongoose } from 'mongoose'
 
 declare global {
+  // eslint-disable-next-line vars-on-top
   var mongoose: {
-    conn: Mongoose | null;
-    promise: Promise<typeof import('mongoose')> | null;
-  };
+    conn: Mongoose | null
+    promise: Promise<typeof import('mongoose')> | null
+  }
 }

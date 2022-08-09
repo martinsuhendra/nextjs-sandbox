@@ -1,10 +1,11 @@
-import { RouterBuilder } from 'next-api-handler';
-import { getUser, putUser, deleteUser } from '@/database/controller';
+import { RouterBuilder } from 'next-api-handler'
 
-const router = new RouterBuilder();
+import { deleteUser, getUser, putUser } from '@/database/controller'
 
-router.get(getUser);
-router.put(putUser);
-router.delete(deleteUser);
+const router = new RouterBuilder()
 
-export default router.build();
+router.get(getUser)
+router.put(putUser)
+router.delete(deleteUser)
+
+export default router.build()

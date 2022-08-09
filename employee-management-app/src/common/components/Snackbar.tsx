@@ -1,30 +1,28 @@
-import React from 'react';
-import { Alert, Snackbar as MuiSnackbar } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { snackbar } from '@/app/redux/rootReducer';
-import useAppSelector from '@/common/hooks/useAppSelector';
+import React from 'react'
+
+import { Alert, Snackbar as MuiSnackbar } from '@mui/material'
+import { useDispatch } from 'react-redux'
+
+import { snackbar } from '@/app/redux/rootReducer'
+import useAppSelector from '@/common/hooks/useAppSelector'
 
 const Snackbar = () => {
-  const state = useAppSelector((state) => state.app.snackbar);
-  const dispatch = useDispatch();
+  const { open, severity, message } = useAppSelector(
+    (state) => state.app.snackbar
+  )
+  const dispatch = useDispatch()
 
   const handleClose = () => {
-    dispatch(snackbar({ open: false }));
-  };
+    dispatch(snackbar({ open: false }))
+  }
 
   return (
-    <MuiSnackbar
-      open={state.open}
-      autoHideDuration={6000}
-      onClose={handleClose}>
-      <Alert
-        onClose={handleClose}
-        severity={state.severity}
-        sx={{ width: '100%' }}>
-        {state.message}
+    <MuiSnackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+        {message}
       </Alert>
     </MuiSnackbar>
-  );
-};
+  )
+}
 
-export default Snackbar;
+export default Snackbar

@@ -1,20 +1,20 @@
-import { Add as AddIcon } from '@mui/icons-material';
-import { Typography, Grid, Button, useTheme } from '@mui/material';
-import Head from 'next/head';
-import { useDispatch } from 'react-redux';
-import EmployeeForm from '@/app/features/employee/EmployeeForm';
-import EmployeeList from '@/app/features/employee/EmployeeList';
-import { toggleChangeAction } from '@/app/redux/rootReducer';
-import FormDialog from '@/common/components/forms/FormDialog';
-import useAppSelector from '@/common/hooks/useAppSelector';
+import { Add as AddIcon } from '@mui/icons-material'
+import { Button, Grid, Typography, useTheme } from '@mui/material'
+import Head from 'next/head'
+import { useDispatch } from 'react-redux'
 
-export default function Home() {
-  const theme = useTheme();
-  const dispatch = useDispatch();
+import EmployeeForm from '@/app/features/employee/EmployeeForm'
+import EmployeeList from '@/app/features/employee/EmployeeList'
+import { toggleChangeAction } from '@/app/redux/rootReducer'
+import FormDialog from '@/common/components/forms/FormDialog'
+
+const Home = () => {
+  const theme = useTheme()
+  const dispatch = useDispatch()
 
   const toggleForm = () => {
-    dispatch(toggleChangeAction());
-  };
+    dispatch(toggleChangeAction())
+  }
 
   return (
     <div>
@@ -29,11 +29,13 @@ export default function Home() {
           justifyContent="center"
           alignItems="center"
           spacing={4}
-          p={theme.spacing(8)}>
+          p={theme.spacing(8)}
+        >
           <Grid item>
             <Typography
               variant="h4"
-              sx={{ fontWeight: 500, letterSpacing: -1 }}>
+              sx={{ fontWeight: 500, letterSpacing: -1 }}
+            >
               Employee Management
             </Typography>
           </Grid>
@@ -42,7 +44,8 @@ export default function Home() {
               onClick={toggleForm}
               endIcon={<AddIcon />}
               variant="contained"
-              disableElevation>
+              disableElevation
+            >
               Add Employee
             </Button>
           </Grid>
@@ -55,5 +58,7 @@ export default function Home() {
         </Grid>
       </main>
     </div>
-  );
+  )
 }
+
+export default Home

@@ -1,18 +1,20 @@
-import { Grid, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { useGetUserQuery } from '@/app/features/employee/employeeApi';
-import EmployeeForm from '@/app/features/employee/EmployeeForm';
+import React from 'react'
+
+import { Grid, Typography } from '@mui/material'
+import { useRouter } from 'next/router'
+
+import { useGetUserQuery } from '@/app/features/employee/employeeApi'
+import EmployeeForm from '@/app/features/employee/EmployeeForm'
 
 const EmployeeDetailPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
+  const router = useRouter()
+  const { id } = router.query
 
-  //RTK QUERY
-  const { data, isLoading } = useGetUserQuery(id as string);
+  // RTK QUERY
+  const { data, isLoading } = useGetUserQuery(id as string)
 
   if (isLoading) {
-    return <Typography>Employee is Loading...</Typography>;
+    return <Typography>Employee is Loading...</Typography>
   }
 
   return (
@@ -21,7 +23,8 @@ const EmployeeDetailPage = () => {
       p={8}
       justifyContent="center"
       alignItems="center"
-      spacing={8}>
+      spacing={8}
+    >
       <Grid item>
         <Typography variant="h4" sx={{ fontWeight: 500, letterSpacing: -1 }}>
           Employee Detail
@@ -31,7 +34,7 @@ const EmployeeDetailPage = () => {
         <EmployeeForm employee={data} onCancel={() => router.back()} />
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default EmployeeDetailPage;
+export default EmployeeDetailPage

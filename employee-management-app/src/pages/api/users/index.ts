@@ -1,14 +1,15 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { RouterBuilder } from 'next-api-handler';
-import connectMongo from '@/database/conn';
-import { deleteUser, getUsers, postUser } from '@/database/controller';
+import { RouterBuilder } from 'next-api-handler'
 
-connectMongo().catch((err) => console.log(`Error in connection: ${err}`));
+import connectMongo from '@/database/conn'
+import { deleteUser, getUsers, postUser } from '@/database/controller'
 
-const router = new RouterBuilder();
+// eslint-disable-next-line no-console
+connectMongo().catch((error) => console.log(`Error in connection: ${error}`))
 
-router.get(async (req, res) => await getUsers(req, res));
-router.post(async (req, res) => await postUser(req, res));
-router.delete(async (req, res) => await deleteUser(req, res));
+const router = new RouterBuilder()
 
-export default router.build();
+router.get(async (req, res) => getUsers(req, res))
+router.post(async (req, res) => postUser(req, res))
+router.delete(async (req, res) => deleteUser(req, res))
+
+export default router.build()

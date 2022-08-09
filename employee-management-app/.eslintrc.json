@@ -1,7 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.eslint.json"
+    "project": ["./tsconfig.json"]
   },
   "plugins": ["@typescript-eslint", "simple-import-sort"],
   "extends": [
@@ -78,6 +78,7 @@
         "restrictedNamedExports": []
       }
     ],
+    "no-underscore-dangle": "off",
     "react/jsx-props-no-spreading": 0,
     "react/require-default-props": 0,
     "react/prop-types": 0,

@@ -1,16 +1,15 @@
-import { EmployeeInput } from './EmployeeForm';
+// RTK Query
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-const BASE_URL = 'http://localhost:3000';
+import { EmployeeInput } from './EmployeeForm'
+import { Employee } from './EmployeeList'
+
+const BASE_URL = 'http://localhost:3000'
 
 type EmployeeUpdateInput = {
-  _id: string;
-  payload: EmployeeInput;
-};
-
-// RTK Query
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Employee } from './EmployeeList';
-import { NextApiResponse } from 'next';
+  _id: string
+  payload: EmployeeInput
+}
 
 export const employeeApi = createApi({
   reducerPath: 'employee',
@@ -21,8 +20,8 @@ export const employeeApi = createApi({
       query: () => '/api/users',
       transformResponse: (res: Employee[]) => {
         return res.map((employee: Employee) => {
-          return { id: employee._id, ...employee };
-        });
+          return { id: employee._id, ...employee }
+        })
       },
       providesTags: ['Employees'],
     }),
@@ -30,7 +29,7 @@ export const employeeApi = createApi({
       query: (employeeId) => `/api/users/${employeeId}`,
       providesTags: ['Employee'],
     }),
-    addUser: builder.mutation<{}, EmployeeInput>({
+    addUser: builder.mutation<unknown, EmployeeInput>({
       query: (employee) => ({
         url: '/api/users',
         method: 'post',
@@ -38,7 +37,7 @@ export const employeeApi = createApi({
       }),
       invalidatesTags: ['Employees'],
     }),
-    editUser: builder.mutation<{}, EmployeeUpdateInput>({
+    editUser: builder.mutation<unknown, EmployeeUpdateInput>({
       query: ({ _id, payload }) => ({
         url: `/api/users/${_id}`,
         method: 'put',
@@ -46,7 +45,7 @@ export const employeeApi = createApi({
       }),
       invalidatesTags: ['Employees', 'Employee'],
     }),
-    deleteUser: builder.mutation<{}, string>({
+    deleteUser: builder.mutation<unknown, string>({
       query: (employeeId) => ({
         url: `/api/users/${employeeId}`,
         method: 'delete',
@@ -54,7 +53,7 @@ export const employeeApi = createApi({
       invalidatesTags: ['Employees'],
     }),
   }),
-});
+})
 
 export const {
   useGetUsersQuery,
@@ -62,4 +61,4 @@ export const {
   useAddUserMutation,
   useDeleteUserMutation,
   useEditUserMutation,
-} = employeeApi;
+} = employeeApi
