@@ -37,7 +37,7 @@ const connectMongo = async () => {
     cached.conn = await cached.promise
     return cached.conn
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error as string)
   }
 }
 
