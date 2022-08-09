@@ -4,7 +4,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { EmployeeInput } from './EmployeeForm'
 import { Employee } from './EmployeeList'
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : process.env.NEXT_PUBLIC_BASE_URL
 
 type EmployeeUpdateInput = {
   _id: string
