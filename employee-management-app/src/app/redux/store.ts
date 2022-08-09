@@ -1,6 +1,6 @@
 import { AnyAction, configureStore, ThunkDispatch } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
-import { employeeApi } from '../../../lib/helper';
+import { employeeApi } from '../features/employee/employeeApi';
 import rootReducer from './rootReducer';
 
 export const store = configureStore({

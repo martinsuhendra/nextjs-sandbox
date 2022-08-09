@@ -1,21 +1,24 @@
-import Users from '../model/user';
+import Users from '@/app/features/employee/server/model/user';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { EmployeeInput } from '@/app/features/employee/EmployeeForm';
+import Error from 'next/error';
 
 // GET: http://localhost:3000/api/users
-export async function getUsers(req: any, res: any) {
+export async function getUsers(req: NextApiRequest, res: NextApiResponse) {
   try {
     const users = await Users.find({});
 
     if (!users) {
-      res.status(404).json({ error: 'Data not found' });
+      return res.status(404).json('Error while fetching data!');
     }
-    res.status(200).json(users);
+    return res.status(200).json(users);
   } catch (error) {
-    res.status(404).json({ error: 'Error while fetching data' });
+    return res.status(404).json({ error });
   }
 }
 
 // GET: http://localhost:3000/api/user/1
-export async function getUser(req: any, res: any) {
+export async function getUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { userId } = req.query;
 
@@ -30,12 +33,12 @@ export async function getUser(req: any, res: any) {
 }
 
 // POST: http://localhost:3000/api/users
-export async function postUser(req: any, res: any) {
+export async function postUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     const formData = req.body;
     if (!formData)
       return res.status(404).json({ error: 'Form Data not provided' });
-    Users.create(formData, function (err: any, data: any) {
+    Users.create(formData, function (err: Error, data: EmployeeInput) {
       return res.status(200).json(data);
     });
   } catch (error) {
@@ -44,7 +47,7 @@ export async function postUser(req: any, res: any) {
 }
 
 // PUT: http://localhost:3000/api/users
-export async function putUser(req: any, res: any) {
+export async function putUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { userId } = req.query;
     const formData = req.body;
@@ -60,7 +63,7 @@ export async function putUser(req: any, res: any) {
 }
 
 // DELETE: http://localhost:3000/api/users
-export async function deleteUser(req: any, res: any) {
+export async function deleteUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { userId } = req.query;
 

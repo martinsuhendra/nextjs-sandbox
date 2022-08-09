@@ -2,17 +2,15 @@ import { Add as AddIcon } from '@mui/icons-material';
 import { Typography, Grid, Button, useTheme } from '@mui/material';
 import Head from 'next/head';
 import { useDispatch } from 'react-redux';
-import EmployeeForm from '../app/features/employee/EmployeeForm';
-import EmployeeList from '../app/features/employee/EmployeeList';
-import { toggleChangeAction } from '../app/redux/rootReducer';
-import FormDialog from '../common/components/forms/FormDialog';
-import useAppSelector from '../common/hooks/useAppSelector';
-// import { useToggle } from '../common/utils/useToggle';
+import EmployeeForm from '@/app/features/employee/EmployeeForm';
+import EmployeeList from '@/app/features/employee/EmployeeList';
+import { toggleChangeAction } from '@/app/redux/rootReducer';
+import FormDialog from '@/common/components/forms/FormDialog';
+import useAppSelector from '@/common/hooks/useAppSelector';
 
 export default function Home() {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const showForm = useAppSelector((state) => state.app.client.toggleForm);
 
   const toggleForm = () => {
     dispatch(toggleChangeAction());
@@ -51,11 +49,9 @@ export default function Home() {
           <Grid item container>
             <EmployeeList />
           </Grid>
-          <FormDialog
-            open={showForm}
-            title="Add New Employee"
-            renderContent={<EmployeeForm onCancel={toggleForm} />}
-          />
+          <FormDialog title="Add New Employee">
+            <EmployeeForm onCancel={toggleForm} />
+          </FormDialog>
         </Grid>
       </main>
     </div>

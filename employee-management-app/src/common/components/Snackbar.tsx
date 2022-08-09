@@ -1,8 +1,8 @@
 import React from 'react';
 import { Alert, Snackbar as MuiSnackbar } from '@mui/material';
-import useAppSelector from '../hooks/useAppSelector';
 import { useDispatch } from 'react-redux';
-import { snackbar } from '../../app/redux/rootReducer';
+import { snackbar } from '@/app/redux/rootReducer';
+import useAppSelector from '@/common/hooks/useAppSelector';
 
 const Snackbar = () => {
   const state = useAppSelector((state) => state.app.snackbar);

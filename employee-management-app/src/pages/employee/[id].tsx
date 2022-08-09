@@ -1,25 +1,15 @@
 import { Grid, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import React, { useMemo } from 'react';
-import { getUser, useGetUserQuery } from '../../../lib/helper';
-import EmployeeForm from '../../app/features/employee/EmployeeForm';
+import React from 'react';
+import { useGetUserQuery } from '@/app/features/employee/employeeApi';
+import EmployeeForm from '@/app/features/employee/EmployeeForm';
 
 const EmployeeDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  //REACT QUERY
-  // const { data, isLoading, isError, error } = useQuery(['user', id], () =>
-  //   getUser(id as string),
-  // );
-
   //RTK QUERY
   const { data, isLoading } = useGetUserQuery(id as string);
-
-  const renderEmployeeForm = useMemo(() => {
-    return <EmployeeForm employee={data} onCancel={() => router.back()} />;
-  }, [data]);
 
   if (isLoading) {
     return <Typography>Employee is Loading...</Typography>;
@@ -38,7 +28,7 @@ const EmployeeDetailPage = () => {
         </Typography>
       </Grid>
       <Grid item container>
-        {renderEmployeeForm}
+        <EmployeeForm employee={data} onCancel={() => router.back()} />
       </Grid>
     </Grid>
   );

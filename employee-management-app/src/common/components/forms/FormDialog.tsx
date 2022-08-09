@@ -1,33 +1,27 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Divider,
-} from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Divider } from '@mui/material';
 import React, { FC, ReactNode } from 'react';
+import { useDispatch } from 'react-redux';
+import { toggleChangeAction } from '@/app/redux/rootReducer';
+import useAppSelector from '@/common/hooks/useAppSelector';
 
 interface FormDialogProps {
-  open: boolean;
   title?: string;
-  onClose?: () => void;
-  renderContent: ReactNode;
+  children: ReactNode;
 }
 
-const FormDialog: FC<FormDialogProps> = ({
-  open,
-  onClose,
-  title,
-  renderContent,
-}) => {
+const FormDialog: FC<FormDialogProps> = ({ title, children }) => {
+  const dispatch = useDispatch();
+  const showForm = useAppSelector((state) => state.app.client.toggleForm);
+
+  const toggleForm = () => {
+    dispatch(toggleChangeAction());
+  };
+
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={showForm} onClose={toggleForm}>
       {title && <DialogTitle>{title}</DialogTitle>}
       <Divider />
-      <DialogContent>{renderContent}</DialogContent>
-      <Divider />
+      <DialogContent>{children}</DialogContent>
     </Dialog>
   );
 };
