@@ -1,43 +1,41 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import Box from '@mui/material/Box';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { useDeleteUserMutation, useGetUsersQuery } from './employeeApi';
-import { Statuses } from './EmployeeForm';
-import {
-  Button,
-  Typography,
-  Grid,
-  IconButton,
-  Avatar,
-  Chip,
-} from '@mui/material';
-import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
-import { useDispatch } from 'react-redux';
-import Link from 'next/link';
-import dayjs from 'dayjs';
-import { fCurrency } from '../../../common/utils/formatNumber';
-import { PAGE_OPTIONS, PAGE_SIZE } from '../../../common/constants/components';
+import React, { useCallback, useMemo } from 'react'
+
+import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material'
+import { Avatar, Chip, Grid, IconButton, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
+import dayjs from 'dayjs'
+import Link from 'next/link'
+
+import { PAGE_OPTIONS, PAGE_SIZE } from '../../../common/constants/components'
+import { fCurrency } from '../../../common/utils/formatNumber'
+
+import { useDeleteUserMutation, useGetUsersQuery } from './employeeApi'
+import { Statuses } from './EmployeeForm'
 
 export type Employee = {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  salary: number;
-  birthday: Date;
-  status: Statuses;
-  avatar?: string;
-};
+  _id: string
+  firstName: string
+  lastName: string
+  email: string
+  salary: number
+  birthday: Date
+  status: Statuses
+  avatar?: string
+}
 
 const EmployeeList = () => {
-  //RTK-QUERY
-  const { data: employeeRows, isError, isLoading, error } = useGetUsersQuery();
+  // RTK-QUERY
+  const { data: employeeRows, isError, isLoading, error } = useGetUsersQuery()
 
-  const [deleteEmployee] = useDeleteUserMutation();
+  const [deleteEmployee] = useDeleteUserMutation()
 
-  const onDelete = async (deleteId: string) => {
-    await deleteEmployee(deleteId);
-  };
+  const onDelete = useCallback(
+    async (deleteId: string) => {
+      await deleteEmployee(deleteId)
+    },
+    [deleteEmployee]
+  )
 
   const columns: GridColDef[] = useMemo(() => {
     return [
@@ -114,22 +112,23 @@ const EmployeeList = () => {
                 color="error"
                 size="small"
                 aria-label="delete"
-                onClick={() => onDelete(params.row._id)}>
+                onClick={() => onDelete(params.row._id)}
+              >
                 <DeleteIcon fontSize="small" />
               </IconButton>
             </Grid>
           </Grid>
         ),
       },
-    ];
-  }, [employeeRows]);
+    ]
+  }, [onDelete])
 
   if (isLoading) {
     return (
       <Box>
         <Typography>Employee is loading...</Typography>
       </Box>
-    );
+    )
   }
 
   if (isError) {
@@ -137,7 +136,7 @@ const EmployeeList = () => {
       <Box>
         <Typography>{JSON.stringify(error, null, 2)}</Typography>
       </Box>
-    );
+    )
   }
 
   return (
@@ -158,7 +157,7 @@ const EmployeeList = () => {
         }}
       />
     </Box>
-  );
-};
+  )
+}
 
-export default EmployeeList;
+export default EmployeeList

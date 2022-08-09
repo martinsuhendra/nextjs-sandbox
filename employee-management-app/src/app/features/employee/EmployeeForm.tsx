@@ -1,5 +1,7 @@
-import React, { FC, useCallback } from 'react';
-import Grid from '@mui/material/Grid';
+import React, { FC, useCallback } from 'react'
+
+import { faker } from '@faker-js/faker'
+import { LoadingButton } from '@mui/lab'
 import {
   Box,
   Button,
@@ -7,23 +9,19 @@ import {
   FormControlLabel,
   FormGroup,
   TextField,
-  useTheme,
-} from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { Controller, useForm } from 'react-hook-form';
-import FormTextField from '../../../common/components/forms/FormTextField';
-import { useAddUserMutation, useEditUserMutation } from './employeeApi';
-import { useDispatch } from 'react-redux';
-import {
-  Severity,
-  snackbar,
-  toggleChangeAction,
-} from '../../redux/rootReducer';
-import { LoadingButton } from '@mui/lab';
-import { Employee } from './EmployeeList';
-import { faker } from '@faker-js/faker';
+} from '@mui/material'
+import Grid from '@mui/material/Grid'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { Controller, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+
+import FormTextField from '../../../common/components/forms/FormTextField'
+import { Severity, snackbar, toggleChangeAction } from '../../redux/rootReducer'
+
+import { useAddUserMutation, useEditUserMutation } from './employeeApi'
+import { Employee } from './EmployeeList'
 
 export enum Statuses {
   ACTIVE = 'active',
@@ -31,32 +29,24 @@ export enum Statuses {
 }
 
 export type EmployeeInput = {
-  _id?: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  salary: number;
-  birthday: Date;
-  status: Statuses;
-  avatar?: string;
-};
+  _id?: string
+  firstName: string
+  lastName: string
+  email: string
+  salary: number
+  birthday: Date
+  status: Statuses
+  avatar?: string
+}
 
 interface EmployeeFormProps {
-  onCancel?: () => void;
-  employee?: Employee;
+  onCancel?: () => void
+  employee?: Employee
 }
 
 const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
-  const theme = useTheme();
-  const dispatch = useDispatch();
-  const {
-    control,
-    handleSubmit,
-    setError,
-    setValue,
-    reset,
-    formState: { isSubmitted, isValid },
-  } = useForm<EmployeeInput>({
+  const dispatch = useDispatch()
+  const { control, handleSubmit, setValue, reset } = useForm<EmployeeInput>({
     defaultValues: {
       firstName: employee?.firstName || '',
       lastName: employee?.lastName || '',
@@ -66,7 +56,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
       status: employee?.status || Statuses.ACTIVE,
       avatar: employee?.avatar || '',
     },
-  });
+  })
 
   const generatePeople = () => {
     const randomEmployee = {
@@ -76,40 +66,38 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
       salary: faker.datatype.number({ min: 1000, max: 10000 }),
       birthday: faker.date.birthdate(),
       avatar: faker.image.avatar(),
-    };
+    }
 
-    reset(randomEmployee);
-  };
+    reset(randomEmployee)
+  }
 
-  //RTK QUERY
-  const [createEmployee, { isLoading, isError, error }] = useAddUserMutation();
-  const [
-    editEmployee,
-    { isLoading: updateLoading, isError: isUpdateError, error: updateError },
-  ] = useEditUserMutation();
+  // RTK QUERY
+  const [createEmployee, { isLoading, isError, error }] = useAddUserMutation()
+  const [editEmployee, { isError: isUpdateError, error: updateError }] =
+    useEditUserMutation()
 
   const onChangeStatus = useCallback(
     (value: Statuses) => {
-      setValue('status', value);
+      setValue('status', value)
     },
-    [setValue],
-  );
+    [setValue]
+  )
 
   const onSubmit = async (data: EmployeeInput) => {
-    //RTK Query
+    // RTK Query
     if (employee) {
-      await editEmployee({ _id: employee._id as string, payload: data });
-      dispatch(snackbar({ message: 'Successfully update data!' }));
+      await editEmployee({ _id: employee._id as string, payload: data })
+      dispatch(snackbar({ message: 'Successfully update data!' }))
     } else {
-      await createEmployee(data);
-      dispatch(toggleChangeAction());
+      await createEmployee(data)
+      dispatch(toggleChangeAction())
     }
-  };
+  }
 
   if (isError || isUpdateError) {
     dispatch(
-      snackbar({ message: error || updateError, severity: Severity.ERROR }),
-    );
+      snackbar({ message: error || updateError, severity: Severity.ERROR })
+    )
   }
 
   return (
@@ -196,7 +184,8 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
           container
           spacing={3}
           justifyContent="flex-end"
-          alignItems="center">
+          alignItems="center"
+        >
           {!employee && (
             <Grid item>
               <Button
@@ -204,7 +193,8 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
                 type="button"
                 variant="outlined"
                 disableElevation
-                color="primary">
+                color="primary"
+              >
                 Generate
               </Button>
             </Grid>
@@ -214,7 +204,8 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
               onClick={onCancel}
               type="button"
               disableElevation
-              color="primary">
+              color="primary"
+            >
               {employee ? 'Back' : 'Cancel'}
             </Button>
           </Grid>
@@ -225,14 +216,15 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
               variant="contained"
               color="primary"
               loading={isLoading}
-              loadingIndicator="Loading...">
+              loadingIndicator="Loading..."
+            >
               {employee ? 'Update' : 'Submit'}
             </LoadingButton>
           </Grid>
         </Grid>
       </Grid>
     </Box>
-  );
-};
+  )
+}
 
-export default EmployeeForm;
+export default EmployeeForm

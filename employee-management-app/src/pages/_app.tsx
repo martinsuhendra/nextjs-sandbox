@@ -1,34 +1,35 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Head from 'next/head';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { CacheProvider, EmotionCache } from '@emotion/react';
-import createCache from '@emotion/cache';
-import { AppProps } from 'next/app';
-import { NextComponentType } from 'next';
-import { store } from '@/app/redux/store';
-import { Provider as RTKProvider } from 'react-redux';
-import Snackbar from '@/common/components/Snackbar';
-import theme from '@/app/theme';
-import ToastProvider from '@/common/components/ToastProvider';
+import * as React from 'react'
+
+import createCache from '@emotion/cache'
+import { CacheProvider, EmotionCache } from '@emotion/react'
+import CssBaseline from '@mui/material/CssBaseline'
+import { ThemeProvider } from '@mui/material/styles'
+import { NextComponentType } from 'next'
+import { AppProps } from 'next/app'
+import Head from 'next/head'
+import { Provider as RTKProvider } from 'react-redux'
+
+import { store } from '@/app/redux/store'
+import theme from '@/app/theme'
+import Snackbar from '@/common/components/Snackbar'
+import ToastProvider from '@/common/components/ToastProvider'
 
 // Client-side cache shared for the whole session
 // of the user in the browser.
 
-const clientSideEmotionCache = createCache({ key: 'css', prepend: true });
+const clientSideEmotionCache = createCache({ key: 'css', prepend: true })
 
 interface ExtendedAppProps extends AppProps {
-  emotionCache?: EmotionCache;
+  emotionCache?: EmotionCache
   Component: React.FC &
     NextComponentType &
     Partial<{
-      Layout: typeof React.Fragment;
-    }>;
+      Layout: typeof React.Fragment
+    }>
 }
 
-export default function MyApp(props: ExtendedAppProps) {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+const MyApp = (props: ExtendedAppProps) => {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
   return (
     <RTKProvider store={store}>
@@ -44,11 +45,7 @@ export default function MyApp(props: ExtendedAppProps) {
         </ThemeProvider>
       </CacheProvider>
     </RTKProvider>
-  );
+  )
 }
 
-MyApp.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-  emotionCache: PropTypes.object,
-  pageProps: PropTypes.object.isRequired,
-};
+export default MyApp

@@ -2,29 +2,29 @@ import {
   SelectProps as SelectPropsType,
   StandardTextFieldProps,
   TextField,
-} from '@mui/material';
+} from '@mui/material'
 import {
   Control,
   Controller,
   ControllerProps,
   FieldValues,
   Path,
-} from 'react-hook-form';
+} from 'react-hook-form'
 
 export type SelectOption = {
-  value: string;
-  label?: string;
-};
+  value: string
+  label?: string
+}
 
 interface FormTextFieldProps<T extends FieldValues>
   extends StandardTextFieldProps {
-  name: Path<T>;
-  control: Control<T>;
+  name: Path<T>
+  control: Control<T>
 }
 
 const DEFAULT_SELECT_PROPS: SelectPropsType = {
   MenuProps: { sx: { maxHeight: 480 } },
-};
+}
 
 const FormTextField = <T extends FieldValues>({
   name,
@@ -48,9 +48,9 @@ const FormTextField = <T extends FieldValues>({
       SelectProps={SelectProps}
       {...props}
     />
-  );
+  )
 
-  return <Controller name={name} control={control} render={render} />;
-};
+  return <Controller name={name} control={control} render={render} />
+}
 
-export default FormTextField;
+export default FormTextField
