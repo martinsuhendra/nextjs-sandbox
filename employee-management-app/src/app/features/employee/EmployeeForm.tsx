@@ -4,11 +4,9 @@ import {
   Box,
   Button,
   Checkbox,
-  Divider,
   FormControlLabel,
   FormGroup,
   TextField,
-  Typography,
   useTheme,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -16,22 +14,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Controller, useForm } from 'react-hook-form';
 import FormTextField from '../../../common/components/forms/FormTextField';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  addUser,
-  getUsers,
-  updateUser,
-  useAddUserMutation,
-  useEditUserMutation,
-  useGetUsersQuery,
-} from '../../../../lib/helper';
+import { useAddUserMutation, useEditUserMutation } from './employeeApi';
 import { useDispatch } from 'react-redux';
 import {
   Severity,
   snackbar,
   toggleChangeAction,
 } from '../../redux/rootReducer';
-import dayjs from 'dayjs';
 import { LoadingButton } from '@mui/lab';
 import { Employee } from './EmployeeList';
 import { faker } from '@faker-js/faker';
@@ -92,20 +81,6 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
     reset(randomEmployee);
   };
 
-  //REACT QUERY
-  // const queryClient = useQueryClient();
-  // const { mutate, isLoading, isError } = useMutation(addUser, {
-  //   onSuccess: () => {
-  //     dispatch(toggleChangeAction());
-  //     queryClient.prefetchQuery(['users'], getUsers);
-  //   },
-  // });
-  // const { mutate: updateMutation } = useMutation(updateUser, {
-  //   onSuccess: () => {
-  //     queryClient.prefetchQuery(['users'], getUsers);
-  //   },
-  // });
-
   //RTK QUERY
   const [createEmployee, { isLoading, isError, error }] = useAddUserMutation();
   const [
@@ -121,11 +96,6 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
   );
 
   const onSubmit = async (data: EmployeeInput) => {
-    //React Query
-    // employee
-    //   ? updateMutation({ _id: employee._id as string, payload })
-    //   : mutate(payload);
-
     //RTK Query
     if (employee) {
       await editEmployee({ _id: employee._id as string, payload: data });

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
-import theme from '../app/theme';
-import createEmotionCache from '../createEmotionCache';
+import theme from '@/app/theme';
+import createCache from '@emotion/cache';
 import { EmotionCache } from '@emotion/react';
 
 export default class MyDocument extends Document<{
@@ -40,7 +40,7 @@ MyDocument.getInitialProps = async (ctx) => {
   // all the SSR requests to speed up performance.
   // However, be aware that it can have global side effects.
 
-  const cache = createEmotionCache();
+  const cache = createCache({ key: 'css', prepend: true });
   const { extractCriticalToChunks } = createEmotionServer(cache);
 
   ctx.renderPage = () =>
