@@ -1,7 +1,11 @@
 import { RouterBuilder } from 'next-api-handler'
 
-import connectMongo from '@/database/conn'
-import { deleteUser, getUsers, postUser } from '@/database/controller'
+import connectMongo from '@/app/features/employee/server/database/conn'
+import {
+  deleteUser,
+  getUsers,
+  postUser,
+} from '@/app/features/employee/server/database/controller'
 
 // eslint-disable-next-line no-console
 connectMongo().catch((error) => console.log(error))

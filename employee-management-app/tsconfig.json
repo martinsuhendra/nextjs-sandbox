@@ -14,12 +14,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      "@/app/*": ["app/*"],
-      "@/common/*": ["common/*"],
-      "@/database/*": ["database/*"],
-      "@/pages/*": ["pages/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": [

@@ -1,6 +1,10 @@
 import { RouterBuilder } from 'next-api-handler'
 
-import { deleteUser, getUser, putUser } from '@/database/controller'
+import {
+  deleteUser,
+  getUser,
+  putUser,
+} from '@/app/features/employee/server/database/controller'
 
 const router = new RouterBuilder()
 

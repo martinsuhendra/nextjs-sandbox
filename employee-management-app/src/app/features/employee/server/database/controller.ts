@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import Users from '@/app/features/employee/server/model/user'
+import Users from '@/app/features/employee/server/services/user'
 
 // GET: http://localhost:3000/api/users
 export async function getUsers(req: NextApiRequest, res: NextApiResponse) {
@@ -8,11 +8,12 @@ export async function getUsers(req: NextApiRequest, res: NextApiResponse) {
     const users = await Users.find({})
 
     if (!users) {
-      throw new Error('Error while fetching data!')
+      res.status(404).json({ error: 'Error while fetching data!' })
+      return
     }
-    return res.status(200).json(users)
+    res.status(200).json(users)
   } catch (error) {
-    return res.status(404).json({ error })
+    res.status(404).json({ error })
   }
 }
 
@@ -22,7 +23,7 @@ export async function getUser(req: NextApiRequest, res: NextApiResponse) {
     const { userId } = req.query
 
     if (!userId) {
-      throw new Error('User not found!')
+      res.status(404).json({ error: 'User not found!' })
     }
     const user = await Users.findById(userId)
     res.status(200).json(user)
@@ -36,12 +37,13 @@ export async function postUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     const formData = req.body
     if (!formData) {
-      return res.status(404).json({ error: 'Form Data not provided' })
+      res.status(404).json({ error: 'Form Data not provided' })
+      return
     }
     const user = await Users.create(formData)
-    return res.status(200).json(user)
+    res.status(200).json(user)
   } catch (error) {
-    return res.status(404).json({ error })
+    res.status(404).json({ error })
   }
 }
 
@@ -54,10 +56,11 @@ export async function putUser(req: NextApiRequest, res: NextApiResponse) {
     if (userId && formData) {
       const user = await Users.findByIdAndUpdate(userId, formData)
       res.status(200).json(user)
+      return
     }
-    throw new Error('user not selected')
+    res.status(404).json({ error: 'User not selected' })
   } catch (error) {
-    return res.status(404).json({ error })
+    res.status(404).json({ error })
   }
 }
 
@@ -69,9 +72,10 @@ export async function deleteUser(req: NextApiRequest, res: NextApiResponse) {
     if (userId) {
       await Users.findByIdAndDelete(userId)
       res.status(200).json({ deleted: userId })
+      return
     }
-    throw new Error('User not selected')
+    res.status(404).json({ error: 'User not selected' })
   } catch {
-    return res.status(404).json({ error: 'Error while deleting user' })
+    res.status(404).json({ error: 'Error while deleting user' })
   }
 }
