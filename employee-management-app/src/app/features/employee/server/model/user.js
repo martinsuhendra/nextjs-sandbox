@@ -9,6 +9,4 @@ const userSchema = new Schema({
   status: String,
   birthday: String,
 })
-
-const Users = models.user || model('user', userSchema)
-export default Users
+export default models.User || model('User', userSchema)

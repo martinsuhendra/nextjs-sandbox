@@ -4,7 +4,7 @@ import connectMongo from '@/database/conn'
 import { deleteUser, getUsers, postUser } from '@/database/controller'
 
 // eslint-disable-next-line no-console
-connectMongo().catch((error) => console.log(`Error in connection: ${error}`))
+connectMongo().catch((error) => console.log(error))
 
 const router = new RouterBuilder()
 
