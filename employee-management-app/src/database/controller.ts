@@ -12,7 +12,6 @@ export async function getUsers(req: NextApiRequest, res: NextApiResponse) {
     }
     return res.status(200).json(users)
   } catch (error) {
-    console.log(error)
     return res.status(404).json({ error })
   }
 }
