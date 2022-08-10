@@ -46,6 +46,21 @@ export const employeeApi = createApi({
         method: 'put',
         body: payload,
       }),
+      onQueryStarted: async (
+        { _id, payload },
+        { dispatch, queryFulfilled }
+      ) => {
+        const patchResult = dispatch(
+          employeeApi.util.updateQueryData('getUser', _id, (draft) => {
+            Object.assign(draft, payload)
+          })
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
       invalidatesTags: ['Employees', 'Employee'],
     }),
     deleteUser: builder.mutation<unknown, string>({
@@ -53,6 +68,18 @@ export const employeeApi = createApi({
         url: `/api/users/${employeeId}`,
         method: 'delete',
       }),
+      onQueryStarted: async (employeeId, { dispatch, queryFulfilled }) => {
+        const deleteResult = dispatch(
+          employeeApi.util.updateQueryData('getUsers', undefined, (draft) => {
+            draft.filter((employee) => employee._id !== employeeId)
+          })
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          deleteResult.undo()
+        }
+      },
       invalidatesTags: ['Employees'],
     }),
   }),

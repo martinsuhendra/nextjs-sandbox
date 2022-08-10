@@ -17,11 +17,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
-import FormTextField from '../../../common/components/forms/FormTextField'
 import { Severity, snackbar, toggleChangeAction } from '../../redux/rootReducer'
 
 import { useAddUserMutation, useEditUserMutation } from './employeeApi'
 import { Employee } from './EmployeeList'
+
+import FormTextField from '@/common/components/forms/FormTextField'
 
 export enum Statuses {
   ACTIVE = 'active',

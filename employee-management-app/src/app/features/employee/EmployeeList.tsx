@@ -7,11 +7,10 @@ import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
 import dayjs from 'dayjs'
 import Link from 'next/link'
 
-import { PAGE_OPTIONS, PAGE_SIZE } from '../../../common/constants/components'
-import { fCurrency } from '../../../common/utils/formatNumber'
-
 import { useDeleteUserMutation, useGetUsersQuery } from './employeeApi'
 import { Statuses } from './EmployeeForm'
+
+import { fCurrency } from '@/common/utils/formatNumber'
 
 export type Employee = {
   _id: string
@@ -23,6 +22,9 @@ export type Employee = {
   status: Statuses
   avatar?: string
 }
+
+const PAGE_SIZE = 10
+const PAGE_OPTIONS = [10]
 
 const EmployeeList = () => {
   // RTK-QUERY
