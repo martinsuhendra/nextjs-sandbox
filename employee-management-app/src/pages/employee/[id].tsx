@@ -55,9 +55,10 @@ interface IParams extends ParsedUrlQuery {
 export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   const { id } = params as IParams
   const employee = await loadEmployee(id)
-
   return {
     props: { employee },
+    // When a request come in revalidate every 5s
+    revalidate: 5,
   }
 }
 
