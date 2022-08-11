@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { EmployeeInput } from './EmployeeForm'
 import { Employee } from './EmployeeList'
 
-const BASE_URL =
+export const BASE_URL =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000'
     : process.env.BASE_URL
