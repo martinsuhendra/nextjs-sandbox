@@ -1,16 +1,19 @@
-import { BASE_URL } from '../employeeApi'
+import connectMongo from '../../../../common/server/database/conn'
+import Users from '../../../../common/server/services/user'
 import { Employee } from '../EmployeeList'
 
-export const loadEmployees = async (): Promise<Employee[]> => {
-  const res = await fetch(`${BASE_URL}/api/users`)
-  const employees = await res.json()
+export const loadEmployees = async (): Promise<Employee[] | undefined> => {
+  await connectMongo()
+  const employees: Employee[] | null = await Users.find({})
 
-  return employees
+  return JSON.parse(JSON.stringify(employees))
 }
 
-export const loadEmployee = async (employeeId: string): Promise<Employee> => {
-  const res = await fetch(`${BASE_URL}/api/users/${employeeId}`)
-  const employee = await res.json()
+export const loadEmployee = async (
+  employeeId: string
+): Promise<Employee | undefined> => {
+  await connectMongo()
+  const employee: Employee | null = await Users.findById(employeeId)
 
-  return employee
+  return JSON.parse(JSON.stringify(employee))
 }

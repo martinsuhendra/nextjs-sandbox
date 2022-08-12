@@ -3,7 +3,7 @@ import { ParsedUrlQuery } from 'querystring'
 import React, { FC } from 'react'
 
 import { Grid, Typography } from '@mui/material'
-import { GetStaticPaths, GetStaticPropsContext } from 'next'
+import { GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 
 import EmployeeForm from '@/app/features/employee/EmployeeForm'
@@ -30,15 +30,16 @@ const EmployeeDetailPage: FC<{ employee: Employee }> = ({ employee }) => {
         </Typography>
       </Grid>
       <Grid item container>
-        <EmployeeForm employee={employee} onCancel={() => router.back()} />
+        <EmployeeForm employee={employee} onCancel={() => router.push('/')} />
       </Grid>
     </Grid>
   )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths = async () => {
   const employees = await loadEmployees()
-  const paths = employees.map((employee: Employee) => ({
+
+  const paths = employees?.map((employee: Employee) => ({
     params: { id: employee._id.toString() },
   }))
 
@@ -53,12 +54,12 @@ interface IParams extends ParsedUrlQuery {
 }
 
 export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
+  // https://wallis.dev/blog/nextjs-getstaticprops-and-getstaticpaths-with-typescript
   const { id } = params as IParams
   const employee = await loadEmployee(id)
   return {
     props: { employee },
-    // When a request come in revalidate every 5s
-    revalidate: 5,
+    revalidate: 1,
   }
 }
 
