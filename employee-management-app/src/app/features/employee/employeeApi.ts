@@ -16,7 +16,7 @@ type EmployeeUpdateInput = {
 
 export const employeeApi = createApi({
   reducerPath: 'employee',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery(),
   tagTypes: ['Employee', 'Employees'],
   endpoints: (builder) => ({
     getUsers: builder.query<Employee[], void>({

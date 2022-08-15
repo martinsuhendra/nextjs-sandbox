@@ -10,7 +10,7 @@ import { toast as reactToastify, ToastOptions } from 'react-toastify'
 import theme from '@/app/theme'
 import { ColorSchema } from '@/app/theme/palette'
 
-type SnackbarIconProps = {
+interface SnackbarIconProps {
   icon: IconifyIcon
   color: ColorSchema
 }

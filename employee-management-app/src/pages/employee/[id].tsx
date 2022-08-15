@@ -56,6 +56,7 @@ interface IParams extends ParsedUrlQuery {
 export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   // https://wallis.dev/blog/nextjs-getstaticprops-and-getstaticpaths-with-typescript
   const { id } = params as IParams
+
   const employee = await loadEmployee(id)
   return {
     props: { employee },
