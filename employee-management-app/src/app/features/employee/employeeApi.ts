@@ -4,11 +4,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { EmployeeInput } from './EmployeeForm'
 import { Employee } from './EmployeeList'
 
-export const BASE_URL =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : process.env.BASE_URL
-
 type EmployeeUpdateInput = {
   _id: string
   payload: EmployeeInput
@@ -16,7 +11,7 @@ type EmployeeUpdateInput = {
 
 export const employeeApi = createApi({
   reducerPath: 'employee',
-  baseQuery: fetchBaseQuery(),
+  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['Employee', 'Employees'],
   endpoints: (builder) => ({
     getUsers: builder.query<Employee[], void>({
