@@ -1,0 +1,14 @@
+{
+  "Employee List": "Employee List",
+  "Add Employee": "Add Employee",
+  "First Name": "First Name",
+  "Last Name": "Last Name",
+  "Salary": "Salary",
+  "Email": "Email",
+  "Birthday": "Birthday",
+  "Active": "Active",
+  "Inactive": "Inactive",
+  "validation.yup.mixed.required": "Please provide this field",
+  "validation.yup.string.email": "Wrong Email Format!",
+  "validation.yup.number.positive": "Please input a positive number"
+}

@@ -7,6 +7,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import { NextComponentType } from 'next'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
+import { appWithTranslation } from 'next-i18next'
 import { Provider as RTKProvider } from 'react-redux'
 
 import Snackbar from '@/common/components/Snackbar'
@@ -40,6 +41,7 @@ const MyApp = (props: ExtendedAppProps) => {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <ToastProvider />
+
           <Component {...pageProps} />
           <Snackbar />
         </ThemeProvider>
@@ -48,4 +50,4 @@ const MyApp = (props: ExtendedAppProps) => {
   )
 }
 
-export default MyApp
+export default appWithTranslation(MyApp)

@@ -1,0 +1,14 @@
+{
+  "Employee List": "Daftar Karyawan",
+  "Add Employee": "Tambah Karyawan",
+  "First Name": "Nama Depan",
+  "Last Name": "Nama Belakang",
+  "Salary": "Gaji",
+  "Email": "Email",
+  "Birthday": "Tanggal Lahir",
+  "Active": "Aktif",
+  "Inactive": "Tidak Aktif",
+  "validation.yup.mixed.required": "Mohon isi field ini",
+  "validation.yup.string.email": "Format Email Harus Benar!",
+  "validation.yup.number.positive": "Mohon masukkan angka positif"
+}

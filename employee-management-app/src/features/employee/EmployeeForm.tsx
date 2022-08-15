@@ -1,6 +1,7 @@
 import React, { FC, useCallback } from 'react'
 
 import { faker } from '@faker-js/faker'
+// import { yupResolver } from '@hookform/resolvers/yup'
 import { LoadingButton } from '@mui/lab'
 import {
   Box,
@@ -14,6 +15,7 @@ import Grid from '@mui/material/Grid'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { useTranslation } from 'next-i18next'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
@@ -27,6 +29,8 @@ import {
 import { Employee } from './EmployeeList'
 
 import FormTextField from '@/common/components/forms/FormTextField'
+import { EMPLOYEE_SCHEMA } from '@/common/forms/schema'
+import { useYupValidationResolver } from '@/common/hooks/useYupValidationResolver'
 
 export enum Statuses {
   ACTIVE = 'active',
@@ -51,7 +55,9 @@ interface EmployeeFormProps {
 
 const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const { control, handleSubmit, setValue, reset } = useForm<EmployeeInput>({
+    resolver: useYupValidationResolver(EMPLOYEE_SCHEMA),
     defaultValues: {
       firstName: employee?.firstName || '',
       lastName: employee?.lastName || '',
@@ -114,29 +120,30 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
           <FormTextField
             name="firstName"
             control={control}
-            label="First Name"
-            required
+            label={t('First Name')}
           />
         </Grid>
         <Grid item xs={6}>
-          <FormTextField name="lastName" control={control} label="Last Name" />
+          <FormTextField
+            name="lastName"
+            control={control}
+            label={t('Last Name')}
+          />
         </Grid>
         <Grid item xs={6}>
           <FormTextField
             name="email"
             control={control}
             type="email"
-            label="Email"
-            required
+            label={t('Email')}
           />
         </Grid>
         <Grid item xs={6}>
           <FormTextField
             name="salary"
             control={control}
-            label="Salary"
+            label={t('Salary')}
             type="number"
-            required
           />
         </Grid>
         <Grid item xs={6}>
@@ -146,7 +153,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
             render={({ field: { value, onChange } }) => (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  label="Birthday"
+                  label={t('Birthday')}
                   onChange={onChange}
                   value={value}
                   renderInput={(params) => (
