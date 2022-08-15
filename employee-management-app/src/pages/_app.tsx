@@ -9,10 +9,10 @@ import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Provider as RTKProvider } from 'react-redux'
 
-import { store } from '@/app/redux/store'
-import theme from '@/app/theme'
 import Snackbar from '@/common/components/Snackbar'
 import ToastProvider from '@/common/components/ToastProvider'
+import { store } from '@/redux/store'
+import theme from '@/theme'
 
 // Client-side cache shared for the whole session
 // of the user in the browser.

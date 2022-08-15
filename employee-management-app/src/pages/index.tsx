@@ -3,10 +3,10 @@ import { Button, Grid, Typography, useTheme } from '@mui/material'
 import Head from 'next/head'
 import { useDispatch } from 'react-redux'
 
-import EmployeeForm from '@/app/features/employee/EmployeeForm'
-import EmployeeList from '@/app/features/employee/EmployeeList'
-import { toggleChangeAction } from '@/app/redux/rootReducer'
 import FormDialog from '@/common/components/forms/FormDialog'
+import EmployeeForm from '@/features/employee/EmployeeForm'
+import EmployeeList from '@/features/employee/EmployeeList'
+import { toggleChangeAction } from '@/redux/rootReducer'
 
 const Home = () => {
   const theme = useTheme()

@@ -1,5 +1,6 @@
 // RTK Query
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { SuccessApiResponse } from 'next-api-handler'
 
 import { EmployeeInput } from './EmployeeForm'
 import { Employee } from './EmployeeList'
@@ -16,18 +17,14 @@ export const employeeApi = createApi({
   endpoints: (builder) => ({
     getUsers: builder.query<Employee[], void>({
       query: () => '/api/users',
-      transformResponse: (res: Employee[]) => {
-        return res.map((employee: Employee) => {
+      transformResponse: (res: SuccessApiResponse<Employee[]>) => {
+        return res.data.map((employee: Employee) => {
           return { id: employee._id, ...employee }
         })
       },
       providesTags: ['Employees'],
     }),
-    getUser: builder.query<Employee, string>({
-      query: (employeeId) => `/api/users/${employeeId}`,
-      providesTags: ['Employee'],
-    }),
-    addUser: builder.mutation<unknown, EmployeeInput>({
+    addUser: builder.mutation<SuccessApiResponse<Employee>, EmployeeInput>({
       query: (employee) => ({
         url: '/api/users',
         method: 'post',
@@ -35,27 +32,15 @@ export const employeeApi = createApi({
       }),
       invalidatesTags: ['Employees'],
     }),
-    editUser: builder.mutation<unknown, EmployeeUpdateInput>({
+    editUser: builder.mutation<
+      SuccessApiResponse<Employee>,
+      EmployeeUpdateInput
+    >({
       query: ({ _id, payload }) => ({
         url: `/api/users/${_id}`,
         method: 'put',
         body: payload,
       }),
-      onQueryStarted: async (
-        { _id, payload },
-        { dispatch, queryFulfilled }
-      ) => {
-        const patchResult = dispatch(
-          employeeApi.util.updateQueryData('getUser', _id, (draft) => {
-            Object.assign(draft, payload)
-          })
-        )
-        try {
-          await queryFulfilled
-        } catch {
-          patchResult.undo()
-        }
-      },
       invalidatesTags: ['Employees', 'Employee'],
     }),
     deleteUser: builder.mutation<unknown, string>({
@@ -82,7 +67,6 @@ export const employeeApi = createApi({
 
 export const {
   useGetUsersQuery,
-  useGetUserQuery,
   useAddUserMutation,
   useDeleteUserMutation,
   useEditUserMutation,

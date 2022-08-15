@@ -6,12 +6,9 @@ import { Grid, Typography } from '@mui/material'
 import { GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 
-import EmployeeForm from '@/app/features/employee/EmployeeForm'
-import { Employee } from '@/app/features/employee/EmployeeList'
-import {
-  loadEmployee,
-  loadEmployees,
-} from '@/app/features/employee/lib/helpers'
+import { loadEmployee, loadEmployees } from '@/common/server/services/helpers'
+import EmployeeForm from '@/features/employee/EmployeeForm'
+import { Employee } from '@/features/employee/EmployeeList'
 
 const EmployeeDetailPage: FC<{ employee: Employee }> = ({ employee }) => {
   const router = useRouter()
@@ -60,7 +57,6 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   const employee = await loadEmployee(id)
   return {
     props: { employee },
-    revalidate: 1,
   }
 }
 

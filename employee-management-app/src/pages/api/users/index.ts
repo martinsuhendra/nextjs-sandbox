@@ -1,24 +1,34 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { NotFoundException, RouterBuilder } from 'next-api-handler'
+import {
+  BadRequestException,
+  NotFoundException,
+  RouterBuilder,
+} from 'next-api-handler'
 
-import { getUsers, postUser } from '@/app/features/employee/server/controller'
-import connectMongo from '@/common/server/database/conn'
-import withError from '@/common/utils/middleware/withError'
+import { createEmployee, loadEmployees } from '@/common/server/services/helpers'
 
 // eslint-disable-next-line no-console
 
 const router = new RouterBuilder()
 
-const connectHandler = async (_req: NextApiRequest, _res: NextApiResponse) => {
-  const response = await connectMongo()
-  if (response.connection.readyState !== 1) {
-    throw new NotFoundException()
-  }
-  return response
-}
+router.get(async () => {
+  const employees = await loadEmployees()
 
-router.use(connectHandler)
-router.get(withError(getUsers))
-router.post(withError(postUser))
+  if (!employees) {
+    throw new NotFoundException('Error while fetching employees')
+  }
+  return employees
+})
+
+router.post(async (req) => {
+  const formData = req.body
+  if (!formData) {
+    throw new BadRequestException('Formdata not provided')
+  }
+  const newUser = await createEmployee(formData)
+  if (!newUser) {
+    throw new NotFoundException('Error while create a new employee')
+  }
+  return newUser
+})
 
 export default router.build()

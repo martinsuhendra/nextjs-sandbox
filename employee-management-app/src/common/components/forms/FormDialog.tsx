@@ -3,8 +3,8 @@ import React, { FC, ReactNode } from 'react'
 import { Dialog, DialogContent, DialogTitle, Divider } from '@mui/material'
 import { useDispatch } from 'react-redux'
 
-import { toggleChangeAction } from '@/app/redux/rootReducer'
 import useAppSelector from '@/common/hooks/useAppSelector'
+import { toggleChangeAction } from '@/redux/rootReducer'
 
 interface FormDialogProps {
   title?: string

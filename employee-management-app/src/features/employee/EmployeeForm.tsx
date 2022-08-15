@@ -11,7 +11,7 @@ import {
   TextField,
 } from '@mui/material'
 import Grid from '@mui/material/Grid'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { Controller, useForm } from 'react-hook-form'
@@ -88,6 +88,9 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
     // RTK Query
     if (employee) {
       await editEmployee({ _id: employee._id as string, payload: data })
+      fetch(`/api/revalidate?userId=${employee._id}`, {
+        method: 'post',
+      })
       dispatch(snackbar({ message: 'Successfully update data!' }))
     } else {
       await createEmployee(data)
@@ -138,7 +141,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
             name="birthday"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Birthday"
                   onChange={onChange}
