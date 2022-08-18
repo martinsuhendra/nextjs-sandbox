@@ -1,26 +1,7 @@
 import { useCallback } from 'react'
 
 import { useTranslation } from 'next-i18next'
-import { AnyObjectSchema } from 'yup'
-
-type YupErrorInner = {
-  value: string
-  path: string
-  params: {
-    value: string
-    originalValue: string
-    path: string
-  }
-  inner: string[]
-  name: string
-  message: string
-}
-
-type YupError = {
-  value: { [key: string]: unknown }
-  errors: string[]
-  inner: YupErrorInner
-}
+import { AnyObjectSchema, ValidationError } from 'yup'
 
 export const useYupValidationResolver = (validationSchema: AnyObjectSchema) => {
   const { t } = useTranslation()
@@ -36,19 +17,24 @@ export const useYupValidationResolver = (validationSchema: AnyObjectSchema) => {
           errors: {},
         }
       } catch (error) {
-        // console.log(JSON.stringify(error, null, 2))
+        if (error instanceof ValidationError) {
+          return {
+            values: {},
+            errors: Object.fromEntries(
+              error.inner.map((currentError) => [
+                currentError.path,
+                {
+                  type: currentError.type ?? 'validation',
+                  // message: t(currentError.message, { field: currentError?.path }),
+                  message: t(currentError.message),
+                },
+              ])
+            ),
+          }
+        }
         return {
           values: {},
-          errors: Object.fromEntries(
-            error.inner.map((currentError) => [
-              currentError.path,
-              {
-                type: currentError.type ?? 'validation',
-                // message: t(currentError.message, { field: currentError?.path }),
-                message: t(currentError.message),
-              },
-            ])
-          ),
+          errors: {},
         }
       }
     },
