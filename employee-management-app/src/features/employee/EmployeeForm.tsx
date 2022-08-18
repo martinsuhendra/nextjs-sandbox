@@ -19,7 +19,11 @@ import { useDispatch } from 'react-redux'
 
 import { Severity, snackbar, toggleChangeAction } from '../../redux/rootReducer'
 
-import { useAddUserMutation, useEditUserMutation } from './employeeApi'
+import {
+  useAddUserMutation,
+  useEditUserMutation,
+  useRevalidateUserMutation,
+} from './employeeApi'
 import { Employee } from './EmployeeList'
 
 import FormTextField from '@/common/components/forms/FormTextField'
@@ -76,6 +80,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
   const [createEmployee, { isLoading, isError, error }] = useAddUserMutation()
   const [editEmployee, { isError: isUpdateError, error: updateError }] =
     useEditUserMutation()
+  const [revalidateUser] = useRevalidateUserMutation()
 
   const onChangeStatus = useCallback(
     (value: Statuses) => {
@@ -88,9 +93,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
     // RTK Query
     if (employee) {
       await editEmployee({ _id: employee._id as string, payload: data })
-      fetch(`/api/revalidate?userId=${employee._id}`, {
-        method: 'post',
-      })
+      await revalidateUser(employee._id)
       dispatch(snackbar({ message: 'Successfully update data!' }))
     } else {
       await createEmployee(data)

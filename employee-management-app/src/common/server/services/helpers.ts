@@ -6,12 +6,12 @@ import Users from './user'
 import { EmployeeInput } from '@/features/employee/EmployeeForm'
 
 const mapEmployee = (employee: Employee) => {
-  return { ...employee, _id: employee._id.toString() }
+  return { ...employee, _id: employee._id?.toString() || '' }
 }
 
 export const loadEmployees = async (): Promise<Employee[]> => {
   await connectMongo()
-  const employees: Employee[] = await Users.find({}).lean()
+  const employees: Employee[] = await Users.find().lean()
   return employees.map((employee) => mapEmployee(employee))
 }
 

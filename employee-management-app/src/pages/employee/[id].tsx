@@ -37,7 +37,7 @@ export const getStaticPaths = async () => {
   const employees = await loadEmployees()
 
   const paths = employees?.map((employee: Employee) => ({
-    params: { id: employee._id.toString() },
+    params: { id: employee._id?.toString() || '' },
   }))
 
   return {

@@ -4,11 +4,11 @@ import { BadRequestException, RouterBuilder } from 'next-api-handler'
 const router = new RouterBuilder()
 
 router.post(async (req: NextApiRequest, res: NextApiResponse) => {
-  if (!req.query.userId) {
+  if (!req.query.employeeId) {
     throw new BadRequestException('Id is not provided')
   }
 
-  await res.revalidate(`/employee/${req.query.userId}`)
+  await res.revalidate(`/employee/${req.query.employeeId}`)
   return res.json({ revalidated: true })
 })
 

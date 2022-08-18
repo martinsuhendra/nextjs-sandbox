@@ -18,9 +18,7 @@ export const employeeApi = createApi({
     getUsers: builder.query<Employee[], void>({
       query: () => '/api/users',
       transformResponse: (res: SuccessApiResponse<Employee[]>) => {
-        return res.data.map((employee: Employee) => {
-          return { id: employee._id, ...employee }
-        })
+        return res.data.map((employee: Employee) => employee)
       },
       providesTags: ['Employees'],
     }),
@@ -30,6 +28,18 @@ export const employeeApi = createApi({
         method: 'post',
         body: employee,
       }),
+      onQueryStarted: async (patch, { dispatch, queryFulfilled }) => {
+        const createResult = dispatch(
+          employeeApi.util.updateQueryData('getUsers', undefined, (draft) => {
+            draft.push({ ...patch, _id: '' })
+          })
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          createResult.undo()
+        }
+      },
       invalidatesTags: ['Employees'],
     }),
     editUser: builder.mutation<
@@ -62,6 +72,13 @@ export const employeeApi = createApi({
       },
       invalidatesTags: ['Employees'],
     }),
+    revalidateUser: builder.mutation({
+      query: (employeeId) => ({
+        url: `/api/revalidate/${employeeId}`,
+        method: 'post',
+      }),
+      invalidatesTags: ['Employee'],
+    }),
   }),
 })
 
@@ -70,4 +87,5 @@ export const {
   useAddUserMutation,
   useDeleteUserMutation,
   useEditUserMutation,
+  useRevalidateUserMutation,
 } = employeeApi

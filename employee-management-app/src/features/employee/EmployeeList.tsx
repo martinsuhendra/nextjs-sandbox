@@ -13,7 +13,7 @@ import { Statuses } from './EmployeeForm'
 import { fCurrency } from '@/common/utils/formatNumber'
 
 export type Employee = {
-  _id: string
+  _id?: string
   firstName: string
   lastName: string
   email: string
@@ -28,7 +28,7 @@ const PAGE_OPTIONS = [10]
 
 const EmployeeList = () => {
   // RTK-QUERY
-  const { data: employeeRows, isError, isLoading, error } = useGetUsersQuery()
+  const { data: employees, isError, isLoading, error } = useGetUsersQuery()
 
   const [deleteEmployee] = useDeleteUserMutation()
 
@@ -144,11 +144,12 @@ const EmployeeList = () => {
   return (
     <Box sx={{ height: 500, width: '100%' }}>
       <DataGrid
-        rows={employeeRows as Employee[]}
+        rows={employees as Employee[]}
         columns={columns}
         pageSize={PAGE_SIZE}
         rowsPerPageOptions={PAGE_OPTIONS}
         disableSelectionOnClick
+        getRowId={(row) => row._id}
         sx={{
           boxShadow: 1,
           border: 0.5,
