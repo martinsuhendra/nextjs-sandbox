@@ -8,7 +8,50 @@
   "Birthday": "Tanggal Lahir",
   "Active": "Aktif",
   "Inactive": "Tidak Aktif",
-  "validation.yup.mixed.required": "Mohon isi field ini",
-  "validation.yup.string.email": "Format Email Harus Benar!",
-  "validation.yup.number.positive": "Mohon masukkan angka positif"
+  "validators": {
+    "mixed": {
+      "default": "Invalid value",
+      "required": "__field__ perlu diisi",
+      "oneOf": "Must be one of the following: ${values}",
+      "notOneOf": "These are not allowed: ${values}",
+      "notType": "Must be a ${type} type",
+      "defined": "This is required"
+    },
+    "string": {
+      "length": "Must be exactly ${length} characters",
+      "min": "Must be at least ${min} characters",
+      "max": "Cannot be more than ${max} characters",
+      "matches": "Must match the following: \"${regex}\"",
+      "email": "Must be a valid email",
+      "url": "Must be a valid URL",
+      "uuid": "Must be a valid UUID",
+      "trim": "Cannot contain spaces before or after",
+      "lowercase": "Must be lowercase",
+      "uppercase": "Must be uppercase"
+    },
+    "number": {
+      "min": "Must be greater than or equal to ${min}",
+      "max": "Must be less than or equal to ${max}",
+      "lessThan": "Must be less than ${less}",
+      "moreThan": "Must be greater than ${more}",
+      "positive": "Must be a positive number",
+      "negative": "Must be a negative number",
+      "integer": "Must be a number"
+    },
+    "date": {
+      "min": "Must be later than ${min}",
+      "max": "Must be before ${max}"
+    },
+    "boolean": {
+      "isValue": "Must be ${value}"
+    },
+    "object": {
+      "noUnknown": "Unknown key ${unknown}"
+    },
+    "array": {
+      "min": "Must have at least ${min} items",
+      "max": "Cannot have more than ${max} items",
+      "length": "Must have ${length} items"
+    }
+  }
 }

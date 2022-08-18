@@ -1,18 +1,8 @@
 import * as yup from 'yup'
 
-yup.setLocale({
-  mixed: {
-    default: 'validation.yup.mixed.default',
-    // required: 'validation.yup.mixed.required {{field}}',
-    required: 'validation.yup.mixed.required',
-  },
-  string: {
-    email: 'validation.yup.string.email',
-  },
-  number: {
-    positive: 'validation.yup.number.positive',
-  },
-})
+import buildYupLocale from '../utils/yupLocale'
+
+buildYupLocale()
 
 export const EMPLOYEE_SCHEMA = yup.object().shape({
   firstName: yup.string().required(),
