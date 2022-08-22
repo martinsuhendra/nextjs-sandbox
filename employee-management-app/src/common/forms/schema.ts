@@ -1,12 +1,11 @@
-import * as yup from 'yup'
+import { TFunction } from 'next-i18next'
 
-import buildYupLocale from '../utils/yupLocale'
+import yup from '@/common/utils/yupLocale'
 
-buildYupLocale()
-
-export const EMPLOYEE_SCHEMA = yup.object().shape({
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
-  email: yup.string().email().required(),
-  salary: yup.number().positive(),
-})
+export const getEmployeeSchema = (t: TFunction) =>
+  yup.object({
+    firstName: yup.string().label(t('First Name')).required(),
+    lastName: yup.string().label(t('Last Name')).required(),
+    email: yup.string().email().label(t('Email')).required(),
+    salary: yup.number().label(t('Salary')).positive(),
+  })

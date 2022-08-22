@@ -1,57 +1,41 @@
 {
-  "Employee List": "Daftar Karyawan",
-  "Add Employee": "Tambah Karyawan",
-  "First Name": "Nama Depan",
-  "Last Name": "Nama Belakang",
-  "Salary": "Gaji",
-  "Email": "Email",
-  "Birthday": "Tanggal Lahir",
   "Active": "Aktif",
+  "Add Employee": "Tambah Karyawan",
+  "Birthday": "Tanggal Lahir",
+  "Cannot be more than __max__ characters": "Cannot be more than __max__ characters",
+  "Cannot contain spaces before or after": "Cannot contain spaces before or after",
+  "Cannot have more than __max__ items": "Cannot have more than __max__ items",
+  "Email": "Email",
+  "Employee List": "Daftar Karyawan",
+  "First Name": "Nama Depan",
   "Inactive": "Tidak Aktif",
-  "validators": {
-    "mixed": {
-      "default": "Invalid value",
-      "required": "__field__ perlu diisi",
-      "oneOf": "Must be one of the following: ${values}",
-      "notOneOf": "These are not allowed: ${values}",
-      "notType": "Must be a ${type} type",
-      "defined": "This is required"
-    },
-    "string": {
-      "length": "Must be exactly ${length} characters",
-      "min": "Must be at least ${min} characters",
-      "max": "Cannot be more than ${max} characters",
-      "matches": "Must match the following: \"${regex}\"",
-      "email": "Must be a valid email",
-      "url": "Must be a valid URL",
-      "uuid": "Must be a valid UUID",
-      "trim": "Cannot contain spaces before or after",
-      "lowercase": "Must be lowercase",
-      "uppercase": "Must be uppercase"
-    },
-    "number": {
-      "min": "Must be greater than or equal to ${min}",
-      "max": "Must be less than or equal to ${max}",
-      "lessThan": "Must be less than ${less}",
-      "moreThan": "Must be greater than ${more}",
-      "positive": "Must be a positive number",
-      "negative": "Must be a negative number",
-      "integer": "Must be a number"
-    },
-    "date": {
-      "min": "Must be later than ${min}",
-      "max": "Must be before ${max}"
-    },
-    "boolean": {
-      "isValue": "Must be ${value}"
-    },
-    "object": {
-      "noUnknown": "Unknown key ${unknown}"
-    },
-    "array": {
-      "min": "Must have at least ${min} items",
-      "max": "Cannot have more than ${max} items",
-      "length": "Must have ${length} items"
-    }
-  }
+  "Invalid value": "Invalid value",
+  "Last Name": "Nama Belakang",
+  "Must be __value__": "Harus __value__",
+  "Must be a __type__ type": "Harus tipe __type__",
+  "Must be a negative number": "Harus menjadi angka negatif",
+  "Must be a number": "Harus nomor",
+  "Must be a positive number": "Harus angka positif",
+  "Must be a valid URL": "Harus berupa url yang valid",
+  "Must be a valid UUID": "Harus uuid yang valid",
+  "Must be at least __min__ characters": "Harus setidaknya __min__ karakter",
+  "Must be before __max__": "Harus sebelum __max__",
+  "Must be exactly __length__ characters": "Harus tepatnya __length__ karakter",
+  "Must be greater than __more__": "Harus lebih besar dari __more__",
+  "Must be greater than or equal to __min__": "Harus lebih besar dari atau sama dengan __min__",
+  "Must be later than __min__": "Harus lebih lambat dari __min__",
+  "Must be less than __less__": "Harus kurang dari __less__",
+  "Must be less than or equal to __max__": "Harus kurang dari atau sama dengan __max__",
+  "Must be lowercase": "Harus huruf kecil",
+  "Must be one of the following: __values__": "Harus menjadi salah satu dari yang berikut: __values__",
+  "Must be uppercase": "Harus huruf besar",
+  "Must have __length__ items": "Harus memiliki item __length__",
+  "Must have at least __min__ items": "Harus memiliki setidaknya __min__ item",
+  "Must match the following: \"__regex__\"": "Harus cocok dengan yang berikut: \"__regex__\"",
+  "Salary": "Gaji",
+  "These are not allowed: __values__": "Ini tidak diperbolehkan: __values__",
+  "This is required": "Ini diperlukan",
+  "Unknown key __unknown__": "Kunci yang tidak diketahui __unknown__",
+  "__field__ is required": "__field__ perlu diisi",
+  "__value__ is not a valid email": "__value__ bukan format email yang benar"
 }

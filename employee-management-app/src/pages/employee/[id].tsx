@@ -16,7 +16,8 @@ const EmployeeDetailPage: FC<{ employee: Employee }> = ({ employee }) => {
   return (
     <Grid
       container
-      p={8}
+      py={8}
+      px={24}
       justifyContent="center"
       alignItems="center"
       spacing={8}

@@ -1,7 +1,8 @@
 import React, { FC, useCallback } from 'react'
 
 import { faker } from '@faker-js/faker'
-// import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Save as SaveIcon } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
   Box,
@@ -15,6 +16,7 @@ import Grid from '@mui/material/Grid'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -29,8 +31,8 @@ import {
 import { Employee } from './EmployeeList'
 
 import FormTextField from '@/common/components/forms/FormTextField'
-import { EMPLOYEE_SCHEMA } from '@/common/forms/schema'
-import { useYupValidationResolver } from '@/common/hooks/useYupValidationResolver'
+import { getEmployeeSchema } from '@/common/forms/schema'
+// import { useYupValidationResolver } from '@/common/hooks/useYupValidationResolver'
 
 export enum Statuses {
   ACTIVE = 'active',
@@ -57,7 +59,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const { control, handleSubmit, setValue, reset } = useForm<EmployeeInput>({
-    resolver: useYupValidationResolver(EMPLOYEE_SCHEMA),
+    resolver: yupResolver(getEmployeeSchema(t)),
     defaultValues: {
       firstName: employee?.firstName || '',
       lastName: employee?.lastName || '',
@@ -84,9 +86,12 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
 
   // RTK QUERY
   const [createEmployee, { isLoading, isError, error }] = useAddUserMutation()
-  const [editEmployee, { isError: isUpdateError, error: updateError }] =
-    useEditUserMutation()
-  const [revalidateUser] = useRevalidateUserMutation()
+  const [
+    editEmployee,
+    { isError: isUpdateError, error: updateError, isLoading: updateIsLoading },
+  ] = useEditUserMutation()
+  const [revalidateUser, { isLoading: revalidateIsLoading }] =
+    useRevalidateUserMutation()
 
   const onChangeStatus = useCallback(
     (value: Statuses) => {
@@ -134,7 +139,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
           <FormTextField
             name="email"
             control={control}
-            type="email"
+            // type="email"
             label={t('Email')}
           />
         </Grid>
@@ -177,7 +182,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
                       onChange={() => onChangeStatus(Statuses.ACTIVE)}
                     />
                   }
-                  label="Active"
+                  label={t('Active')}
                 />
                 <FormControlLabel
                   control={
@@ -186,11 +191,30 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
                       onChange={() => onChangeStatus(Statuses.INACTIVE)}
                     />
                   }
-                  label="Inactive"
+                  label={t('Inactive')}
                 />
               </FormGroup>
             )}
           />
+        </Grid>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="flex-end"
+          alignItems="center"
+          mt={4}
+          pr={8}
+        >
+          <Grid item>
+            <Link href="/" locale="en">
+              English
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link href="/" locale="id">
+              Bahasa
+            </Link>
+          </Grid>
         </Grid>
         <Grid
           mt={4}
@@ -229,8 +253,10 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
               disableElevation
               variant="contained"
               color="primary"
-              loading={isLoading}
-              loadingIndicator="Loading..."
+              loading={isLoading || updateIsLoading || revalidateIsLoading}
+              loadingPosition="start"
+              startIcon={<SaveIcon />}
+              sx={{ px: 2 }}
             >
               {employee ? 'Update' : 'Submit'}
             </LoadingButton>

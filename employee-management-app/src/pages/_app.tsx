@@ -41,7 +41,6 @@ const MyApp = (props: ExtendedAppProps) => {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <ToastProvider />
-
           <Component {...pageProps} />
           <Snackbar />
         </ThemeProvider>

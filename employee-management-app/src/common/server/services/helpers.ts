@@ -12,7 +12,10 @@ const mapEmployee = (employee: Employee) => {
 export const loadEmployees = async (): Promise<Employee[]> => {
   await connectMongo()
   const employees: Employee[] = await Users.find().lean()
-  return employees.map((employee) => mapEmployee(employee))
+  return employees.map((employee) => ({
+    ...employee,
+    _id: employee._id?.toString() || '',
+  }))
 }
 
 export const loadEmployee = async (

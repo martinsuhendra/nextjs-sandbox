@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { useDeleteUserMutation, useGetUsersQuery } from './employeeApi'
 import { Statuses } from './EmployeeForm'
 
+import LoadingDialog from '@/common/components/LoadingDialog'
 import { fCurrency } from '@/common/utils/formatNumber'
 
 export type Employee = {
@@ -30,7 +31,7 @@ const EmployeeList = () => {
   // RTK-QUERY
   const { data: employees, isError, isLoading, error } = useGetUsersQuery()
 
-  const [deleteEmployee] = useDeleteUserMutation()
+  const [deleteEmployee, { isLoading: deleteLoading }] = useDeleteUserMutation()
 
   const onDelete = useCallback(
     async (deleteId: string) => {
@@ -125,14 +126,6 @@ const EmployeeList = () => {
     ]
   }, [onDelete])
 
-  if (isLoading) {
-    return (
-      <Box>
-        <Typography>Employee is loading...</Typography>
-      </Box>
-    )
-  }
-
   if (isError) {
     return (
       <Box>
@@ -142,24 +135,27 @@ const EmployeeList = () => {
   }
 
   return (
-    <Box sx={{ height: 500, width: '100%' }}>
-      <DataGrid
-        rows={employees as Employee[]}
-        columns={columns}
-        pageSize={PAGE_SIZE}
-        rowsPerPageOptions={PAGE_OPTIONS}
-        disableSelectionOnClick
-        getRowId={(row) => row._id}
-        sx={{
-          boxShadow: 1,
-          border: 0.5,
-          borderColor: 'primary.light',
-          '& .MuiDataGrid-cell:hover': {
-            color: 'primary.main',
-          },
-        }}
-      />
-    </Box>
+    <>
+      <Box sx={{ height: 500, width: '100%' }}>
+        <DataGrid
+          rows={employees || []}
+          columns={columns}
+          pageSize={PAGE_SIZE}
+          rowsPerPageOptions={PAGE_OPTIONS}
+          disableSelectionOnClick
+          getRowId={(row) => row._id}
+          sx={{
+            boxShadow: 1,
+            border: 0.5,
+            borderColor: 'primary.light',
+            '& .MuiDataGrid-cell:hover': {
+              color: 'primary.main',
+            },
+          }}
+        />
+      </Box>
+      <LoadingDialog open={isLoading || deleteLoading} title="Loading" />
+    </>
   )
 }
 
