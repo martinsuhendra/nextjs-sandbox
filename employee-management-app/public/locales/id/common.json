@@ -18,7 +18,6 @@
   "Must be a positive number": "Harus angka positif",
   "Must be a valid URL": "Harus berupa url yang valid",
   "Must be a valid UUID": "Harus uuid yang valid",
-  "Must be at least __min__ characters": "Harus setidaknya __min__ karakter",
   "Must be before __max__": "Harus sebelum __max__",
   "Must be exactly __length__ characters": "Harus tepatnya __length__ karakter",
   "Must be greater than __more__": "Harus lebih besar dari __more__",
@@ -32,10 +31,11 @@
   "Must have __length__ items": "Harus memiliki item __length__",
   "Must have at least __min__ items": "Harus memiliki setidaknya __min__ item",
   "Must match the following: \"__regex__\"": "Harus cocok dengan yang berikut: \"__regex__\"",
+  "Please provide a valid email address": "Mohon masukkan format email yang valid",
   "Salary": "Gaji",
   "These are not allowed: __values__": "Ini tidak diperbolehkan: __values__",
   "This is required": "Ini diperlukan",
   "Unknown key __unknown__": "Kunci yang tidak diketahui __unknown__",
-  "__field__ is required": "__field__ perlu diisi",
-  "__value__ is not a valid email": "__value__ bukan format email yang benar"
+  "__field__ Must be at least __min__ characters": "__field__ perlu setidaknya __min__ karakter",
+  "__field__ is required": "__field__ perlu diisi"
 }

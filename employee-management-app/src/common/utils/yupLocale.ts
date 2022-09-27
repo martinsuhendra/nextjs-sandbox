@@ -15,12 +15,16 @@ yup.setLocale({
   string: {
     length: ({ length }) =>
       i18n?.t('Must be exactly __length__ characters', { length }),
-    min: ({ min }) => i18n?.t('Must be at least __min__ characters', { min }),
+    min: ({ label, min }) =>
+      i18n?.t('__field__ Must be at least __min__ characters', {
+        min,
+        field: label,
+      }),
     max: ({ max }) =>
       i18n?.t('Cannot be more than __max__ characters', { max }),
     matches: ({ regex }) =>
       i18n?.t('Must match the following: "__regex__"', { regex }),
-    email: ({ value }) => i18n?.t('__value__ is not a valid email', { value }),
+    email: () => i18n?.t('Please provide a valid email address'),
     url: () => i18n?.t('Must be a valid URL'),
     uuid: () => i18n?.t('Must be a valid UUID'),
     trim: () => i18n?.t('Cannot contain spaces before or after'),

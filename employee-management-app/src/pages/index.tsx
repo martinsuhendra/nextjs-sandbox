@@ -8,6 +8,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useDispatch } from 'react-redux'
 
 import FormDialog from '@/common/components/forms/FormDialog'
+import Highlights from '@/common/components/forms/Highlights'
 import EmployeeForm from '@/features/employee/EmployeeForm'
 import EmployeeList from '@/features/employee/EmployeeList'
 import { toggleChangeAction } from '@/redux/rootReducer'
@@ -80,6 +81,9 @@ const Home = () => {
             >
               {t('Add Employee')}
             </Button>
+          </Grid>
+          <Grid item xs container>
+            <Highlights />
           </Grid>
           <Grid item container>
             <EmployeeList />

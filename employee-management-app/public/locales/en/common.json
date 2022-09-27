@@ -38,5 +38,6 @@
   "Must have at least __min__ items": "Must have at least __min__ items",
   "Cannot have more than __max__ items": "Cannot have more than __max__ items",
   "Must have __length__ items": "Must have __length__ items",
-  "Please provide a valid email address": "Please provide a valid email address"
+  "Please provide a valid email address": "Please provide a valid email address",
+  "__field__ Must be at least __min__ characters": "__field__ Must be at least __min__ characters"
 }

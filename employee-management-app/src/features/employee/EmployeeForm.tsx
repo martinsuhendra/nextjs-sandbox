@@ -32,7 +32,6 @@ import { Employee } from './EmployeeList'
 
 import FormTextField from '@/common/components/forms/FormTextField'
 import { getEmployeeSchema } from '@/common/forms/schema'
-// import { useYupValidationResolver } from '@/common/hooks/useYupValidationResolver'
 
 export enum Statuses {
   ACTIVE = 'active',
@@ -136,12 +135,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
           />
         </Grid>
         <Grid item xs={6}>
-          <FormTextField
-            name="email"
-            control={control}
-            // type="email"
-            label={t('Email')}
-          />
+          <FormTextField name="email" control={control} label={t('Email')} />
         </Grid>
         <Grid item xs={6}>
           <FormTextField
