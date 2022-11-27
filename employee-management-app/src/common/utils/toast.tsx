@@ -7,10 +7,10 @@ import { Box, Typography } from '@mui/material'
 import { alpha } from '@mui/material/styles'
 import { toast as reactToastify, ToastOptions } from 'react-toastify'
 
-import theme from '@/app/theme'
-import { ColorSchema } from '@/app/theme/palette'
+import theme from '@/theme'
+import { ColorSchema } from '@/theme/palette'
 
-type SnackbarIconProps = {
+interface SnackbarIconProps {
   icon: IconifyIcon
   color: ColorSchema
 }

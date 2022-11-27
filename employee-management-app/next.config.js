@@ -1,12 +1,14 @@
+const { i18n } = require('./next-i18next.config')
+
 /**
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
-  env: {
-    MONGO_URI: process.env.MONGO_URI,
-    BASE_URL: process.env.BASE_URL,
+  i18n: {
+    locales: i18n.locales,
+    defaultLocale: i18n.defaultLocale,
   },
 }
 

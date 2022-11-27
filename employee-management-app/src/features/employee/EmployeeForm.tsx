@@ -1,6 +1,8 @@
 import React, { FC, useCallback } from 'react'
 
 import { faker } from '@faker-js/faker'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Save as SaveIcon } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
   Box,
@@ -11,18 +13,25 @@ import {
   TextField,
 } from '@mui/material'
 import Grid from '@mui/material/Grid'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
 import { Severity, snackbar, toggleChangeAction } from '../../redux/rootReducer'
 
-import { useAddUserMutation, useEditUserMutation } from './employeeApi'
+import {
+  useAddUserMutation,
+  useEditUserMutation,
+  useRevalidateUserMutation,
+} from './employeeApi'
 import { Employee } from './EmployeeList'
 
 import FormTextField from '@/common/components/forms/FormTextField'
+import { getEmployeeSchema } from '@/common/forms/schema'
 
 export enum Statuses {
   ACTIVE = 'active',
@@ -47,7 +56,9 @@ interface EmployeeFormProps {
 
 const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const { control, handleSubmit, setValue, reset } = useForm<EmployeeInput>({
+    resolver: yupResolver(getEmployeeSchema(t)),
     defaultValues: {
       firstName: employee?.firstName || '',
       lastName: employee?.lastName || '',
@@ -74,8 +85,12 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
 
   // RTK QUERY
   const [createEmployee, { isLoading, isError, error }] = useAddUserMutation()
-  const [editEmployee, { isError: isUpdateError, error: updateError }] =
-    useEditUserMutation()
+  const [
+    editEmployee,
+    { isError: isUpdateError, error: updateError, isLoading: updateIsLoading },
+  ] = useEditUserMutation()
+  const [revalidateUser, { isLoading: revalidateIsLoading }] =
+    useRevalidateUserMutation()
 
   const onChangeStatus = useCallback(
     (value: Statuses) => {
@@ -88,6 +103,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
     // RTK Query
     if (employee) {
       await editEmployee({ _id: employee._id as string, payload: data })
+      await revalidateUser(employee._id)
       dispatch(snackbar({ message: 'Successfully update data!' }))
     } else {
       await createEmployee(data)
@@ -108,29 +124,25 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
           <FormTextField
             name="firstName"
             control={control}
-            label="First Name"
-            required
+            label={t('First Name')}
           />
-        </Grid>
-        <Grid item xs={6}>
-          <FormTextField name="lastName" control={control} label="Last Name" />
         </Grid>
         <Grid item xs={6}>
           <FormTextField
-            name="email"
+            name="lastName"
             control={control}
-            type="email"
-            label="Email"
-            required
+            label={t('Last Name')}
           />
+        </Grid>
+        <Grid item xs={6}>
+          <FormTextField name="email" control={control} label={t('Email')} />
         </Grid>
         <Grid item xs={6}>
           <FormTextField
             name="salary"
             control={control}
-            label="Salary"
+            label={t('Salary')}
             type="number"
-            required
           />
         </Grid>
         <Grid item xs={6}>
@@ -138,9 +150,9 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
             name="birthday"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  label="Birthday"
+                  label={t('Birthday')}
                   onChange={onChange}
                   value={value}
                   renderInput={(params) => (
@@ -164,7 +176,7 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
                       onChange={() => onChangeStatus(Statuses.ACTIVE)}
                     />
                   }
-                  label="Active"
+                  label={t('Active')}
                 />
                 <FormControlLabel
                   control={
@@ -173,11 +185,30 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
                       onChange={() => onChangeStatus(Statuses.INACTIVE)}
                     />
                   }
-                  label="Inactive"
+                  label={t('Inactive')}
                 />
               </FormGroup>
             )}
           />
+        </Grid>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="flex-end"
+          alignItems="center"
+          mt={4}
+          pr={8}
+        >
+          <Grid item>
+            <Link href="/" locale="en">
+              English
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link href="/" locale="id">
+              Bahasa
+            </Link>
+          </Grid>
         </Grid>
         <Grid
           mt={4}
@@ -216,8 +247,10 @@ const EmployeeForm: FC<EmployeeFormProps> = ({ onCancel, employee }) => {
               disableElevation
               variant="contained"
               color="primary"
-              loading={isLoading}
-              loadingIndicator="Loading..."
+              loading={isLoading || updateIsLoading || revalidateIsLoading}
+              loadingPosition="start"
+              startIcon={<SaveIcon />}
+              sx={{ px: 2 }}
             >
               {employee ? 'Update' : 'Submit'}
             </LoadingButton>

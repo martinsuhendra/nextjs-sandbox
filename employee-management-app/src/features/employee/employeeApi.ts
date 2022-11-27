@@ -1,13 +1,9 @@
 // RTK Query
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { SuccessApiResponse } from 'next-api-handler'
 
 import { EmployeeInput } from './EmployeeForm'
 import { Employee } from './EmployeeList'
-
-const BASE_URL =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : process.env.BASE_URL
 
 type EmployeeUpdateInput = {
   _id: string
@@ -16,51 +12,45 @@ type EmployeeUpdateInput = {
 
 export const employeeApi = createApi({
   reducerPath: 'employee',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['Employee', 'Employees'],
   endpoints: (builder) => ({
     getUsers: builder.query<Employee[], void>({
       query: () => '/api/users',
-      transformResponse: (res: Employee[]) => {
-        return res.map((employee: Employee) => {
-          return { id: employee._id, ...employee }
-        })
+      transformResponse: (res: SuccessApiResponse<Employee[]>) => {
+        return res.data.map((employee: Employee) => employee)
       },
       providesTags: ['Employees'],
     }),
-    getUser: builder.query<Employee, string>({
-      query: (employeeId) => `/api/users/${employeeId}`,
-      providesTags: ['Employee'],
-    }),
-    addUser: builder.mutation<unknown, EmployeeInput>({
+    addUser: builder.mutation<SuccessApiResponse<Employee>, EmployeeInput>({
       query: (employee) => ({
         url: '/api/users',
         method: 'post',
         body: employee,
       }),
-      invalidatesTags: ['Employees'],
-    }),
-    editUser: builder.mutation<unknown, EmployeeUpdateInput>({
-      query: ({ _id, payload }) => ({
-        url: `/api/users/${_id}`,
-        method: 'put',
-        body: payload,
-      }),
-      onQueryStarted: async (
-        { _id, payload },
-        { dispatch, queryFulfilled }
-      ) => {
-        const patchResult = dispatch(
-          employeeApi.util.updateQueryData('getUser', _id, (draft) => {
-            Object.assign(draft, payload)
+      onQueryStarted: async (patch, { dispatch, queryFulfilled }) => {
+        const createResult = dispatch(
+          employeeApi.util.updateQueryData('getUsers', undefined, (draft) => {
+            draft.push({ ...patch, _id: '' })
           })
         )
         try {
           await queryFulfilled
         } catch {
-          patchResult.undo()
+          createResult.undo()
         }
       },
+      invalidatesTags: ['Employees'],
+    }),
+    editUser: builder.mutation<
+      SuccessApiResponse<Employee>,
+      EmployeeUpdateInput
+    >({
+      query: ({ _id, payload }) => ({
+        url: `/api/users/${_id}`,
+        method: 'put',
+        body: payload,
+      }),
       invalidatesTags: ['Employees', 'Employee'],
     }),
     deleteUser: builder.mutation<unknown, string>({
@@ -82,13 +72,20 @@ export const employeeApi = createApi({
       },
       invalidatesTags: ['Employees'],
     }),
+    revalidateUser: builder.mutation({
+      query: (employeeId) => ({
+        url: `/api/revalidate/${employeeId}`,
+        method: 'post',
+      }),
+      invalidatesTags: ['Employee'],
+    }),
   }),
 })
 
 export const {
   useGetUsersQuery,
-  useGetUserQuery,
   useAddUserMutation,
   useDeleteUserMutation,
   useEditUserMutation,
+  useRevalidateUserMutation,
 } = employeeApi
