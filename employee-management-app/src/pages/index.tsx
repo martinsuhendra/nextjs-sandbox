@@ -1,12 +1,17 @@
+import { useState } from 'react'
+
 import { Add as AddIcon } from '@mui/icons-material'
 import { Button, Grid, Typography, useTheme } from '@mui/material'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useDispatch } from 'react-redux'
 
+import DndDialog from '@/common/components/forms/DndDialog'
+import DnDFramerDialog from '@/common/components/forms/DnDFramerDialog'
 import FormDialog from '@/common/components/forms/FormDialog'
 import Highlights from '@/common/components/forms/Highlights'
 import EmployeeForm from '@/features/employee/EmployeeForm'
@@ -24,7 +29,10 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 const Home = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
+  const router = useRouter()
   const { t } = useTranslation()
+  const [showDnd, setShowDnd] = useState(false)
+  const [showFramerDnd, setShowFramerDnd] = useState(false)
 
   const toggleForm = () => {
     dispatch(toggleChangeAction())
@@ -81,6 +89,30 @@ const Home = () => {
             >
               {t('Add Employee')}
             </Button>
+            <Button
+              onClick={() => setShowDnd(true)}
+              variant="contained"
+              disableElevation
+              sx={{ ml: 4 }}
+            >
+              {t('List Employee DND')}
+            </Button>
+            <Button
+              onClick={() => setShowFramerDnd(true)}
+              variant="contained"
+              disableElevation
+              sx={{ ml: 4 }}
+            >
+              {t('List Employee Framer Motion')}
+            </Button>
+            <Button
+              onClick={() => router.push('/component/textfield')}
+              variant="contained"
+              disableElevation
+              sx={{ ml: 4 }}
+            >
+              {t('Text Field')}
+            </Button>
           </Grid>
           <Grid item xs container>
             <Highlights />
@@ -91,6 +123,11 @@ const Home = () => {
           <FormDialog title="Add New Employee">
             <EmployeeForm onCancel={toggleForm} />
           </FormDialog>
+          <DndDialog open={showDnd} onClose={() => setShowDnd(false)} />
+          <DnDFramerDialog
+            open={showFramerDnd}
+            onClose={() => setShowFramerDnd(false)}
+          />
         </Grid>
       </main>
     </div>
