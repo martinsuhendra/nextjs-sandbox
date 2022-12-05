@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 
 import yup from '@/common/utils/yupLocale'
 import CurrencyTextField from '@/features/component/CurrencyTextField'
+import FormCurrencyTextField from '@/features/component/FormCurrencyTextField'
 
 const currencyValidator = yup.object({
   price: yup.string().required('Price number is required'),
@@ -51,24 +52,11 @@ const TextFieldPage = () => {
         <Typography sx={{ mb: 3 }}>
           Currency Textfield w/ React Hook Form
         </Typography>
-        <Controller
-          name="price"
+        <FormCurrencyTextField
           control={control}
-          render={({ field: { value, onChange }, fieldState: { error } }) => {
-            return (
-              <CurrencyTextField
-                required
-                error={!!error}
-                value={value}
-                name="price"
-                label="Price"
-                currencySymbol="$S"
-                onChange={onChange}
-                helperText={error?.message || 'Minimum 1 And Maximum 1000'}
-                suffix=",00"
-              />
-            )
-          }}
+          name="price"
+          currencySymbol="$S"
+          suffix=",00"
         />
         <Button
           sx={{ display: 'block', mt: 3 }}
