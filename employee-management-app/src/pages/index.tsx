@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Add as AddIcon } from '@mui/icons-material'
 import { Button, Grid, Typography, useTheme } from '@mui/material'
@@ -37,6 +37,10 @@ const Home = () => {
   const toggleForm = () => {
     dispatch(toggleChangeAction())
   }
+
+  useEffect(() => {
+    router.push('/component/textfield')
+  })
 
   return (
     <div>
