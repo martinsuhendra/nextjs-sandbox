@@ -68,6 +68,8 @@ const NumericFormatCustom = forwardRef<
 const FormCurrencyTextField = <T extends FieldValues>({
   name,
   control,
+  helperText,
+  fullWidth,
   currencySymbol,
   suffix,
   thousandSeparator,
@@ -84,6 +86,8 @@ const FormCurrencyTextField = <T extends FieldValues>({
         name={name}
         onChange={onChange}
         error={Boolean(error)}
+        helperText={error?.message || helperText}
+        fullWidth={fullWidth}
         InputProps={{
           inputComponent: NumericFormatCustom as never,
           inputProps: { suffix, thousandSeparator, decimalSeparator },

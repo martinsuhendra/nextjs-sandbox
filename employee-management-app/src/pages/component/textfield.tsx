@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Button, Paper, Typography } from '@mui/material'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import yup from '@/common/utils/yupLocale'
 import CurrencyTextField from '@/features/component/CurrencyTextField'
@@ -29,7 +29,7 @@ const TextFieldPage = () => {
     if (+values.price > MAXIMUM_VALUE || +values.price < MINIMUM_VALUE) {
       return setError('price', {
         type: 'onChange',
-        message: 'Price number must be within minimum and maximum',
+        message: `Price number must be within ${MINIMUM_VALUE} and ${MAXIMUM_VALUE}`,
       })
     }
     return alert(`Price is ${values.price}`)
